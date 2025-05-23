@@ -21,20 +21,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Force cache invalidation with version parameter -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- Add a timestamp to force browsers to recognize this as a new page -->
+    <meta name="version" content="v1.8.<?php echo time(); ?>">
     <style>
         :root {
             --primary-color: #0073CF;
             --primary-light: #47A9FF;
             --primary-dark: #005AA3;
-            --secondary-color: #00B894;
+            --secondary-color: #728F63; /* Earthy green instead of teal */
+            --accent-color: #B8845F; /* Warm wood tone for accents */
             --text-color: #1F2937;
             --text-light: #6B7280;
-            --background-color: #F3F4F6;
+            --background-color: #F7F5F0; /* Slightly off-white for a natural paper feel */
             --white: #FFFFFF;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --border-radius: 16px;
             --vh: 1vh; /* Custom property for iOS height fix */
+            --wood-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0id29vZCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiPgogICAgICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0icmdiYSgxODQsMTMyLDk1LDAuMDgpIi8+CiAgICAgIDxnIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjQsMTE3LDgwLDAuMDQpIiBzdHJva2Utd2lkdGg9IjEuNSI+CiAgICAgICAgPHBhdGggZD0iTTAgMCBMIDIwMCAyMDAiLz4KICAgICAgICA8cGF0aCBkPSJNMTAwIDAgTCAyMDAgMTAwIi8+CiAgICAgICAgPHBhdGggZD0iTTAgMTAwIEwgMTAwIDIwMCIvPgogICAgICAgIDxwYXRoIGQ9Ik01MCAwIEwgMjAwIDE1MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0wIDUwIEwgMTUwIDIwMCIvPgogICAgICAgIDxwYXRoIGQ9Ik0xNTAgMCBMIDIwMCA1MCIvPgogICAgICAgIDxwYXRoIGQ9Ik0wIDE1MCBMIDU0IDIwMCIvPgogICAgICA8L2c+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjd29vZCkiLz4KPC9zdmc+');
         }
 
         * {
@@ -50,8 +58,13 @@
             height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* Ensure proper centering */
             overflow: hidden;
+            /* Add subtle texture to body background */
+            background-image: var(--wood-texture);
+            background-repeat: repeat;
+            margin: 0; /* Remove any default margins */
+            padding: 0; /* Remove any default padding */
         }
 
         /* Language selector styles */
@@ -76,6 +89,9 @@
             max-width: 500px;
             box-shadow: var(--shadow-lg);
             text-align: center;
+            /* Add subtle texture */
+            background-image: var(--wood-texture);
+            border: 1px solid rgba(184, 132, 95, 0.2);
         }
 
         .language-selector-title {
@@ -141,7 +157,16 @@
 
         /* Hide all content initially */
         .content-container {
-            display: none;
+            display: none; /* Initially hidden */
+        }
+
+        /* When content is visible */
+        .content-container.visible {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Container styling */
@@ -154,10 +179,14 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-lg);
             overflow: hidden;
+            /* Add subtle border */
+            border: 1px solid rgba(184, 132, 95, 0.2);
+            margin: 0 auto; /* Ensure horizontal centering */
         }
 
+        /* Sidebar layout */
         .sidebar {
-            width: 35%;
+            width: 38%; /* Increased width for more prominence */
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: var(--white);
             padding: 2rem;
@@ -165,6 +194,7 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            min-width: 300px; /* Ensure minimum width */
         }
 
         .sidebar::before {
@@ -179,6 +209,19 @@
             z-index: 0;
         }
 
+        /* Add subtle wood grain texture overlay to sidebar */
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--wood-texture);
+            opacity: 0.05;
+            z-index: 0;
+        }
+
         .sidebar-content {
             position: relative;
             z-index: 1;
@@ -188,9 +231,11 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 2rem; /* Larger logo */
             font-weight: 700;
             margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Add subtle text shadow */
+            letter-spacing: 0.5px; /* Slight letter spacing for rustic feel */
         }
 
         .tagline {
@@ -198,21 +243,23 @@
             font-weight: 700;
             line-height: 1.3;
             margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15); /* Add subtle text shadow */
         }
 
         .description {
-            font-size: 1rem;
+            font-size: 1.1rem; /* Slightly larger for better readability */
             font-weight: 400;
             line-height: 1.6;
             margin-bottom: 2rem;
+            letter-spacing: 0.2px; /* Slight letter spacing for rustic feel */
         }
 
         .features {
             margin-top: auto;
-            overflow-y: auto;
-            padding-bottom: 1rem;
-            mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+            background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent background */
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 3px solid var(--secondary-color); /* Earthy green accent border */
         }
 
         .feature {
@@ -231,6 +278,7 @@
             justify-content: center;
             margin-right: 1rem;
             flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
         }
 
         .feature-text {
@@ -240,22 +288,29 @@
         }
 
         .chat-container {
-            width: 65%;
+            width: 62%; /* Adjusted width to match sidebar increase */
             display: flex;
             flex-direction: column;
+            background-color: var(--white);
+            /* Add very subtle texture */
+            background-image: var(--wood-texture);
+            background-repeat: repeat;
         }
 
         .chat-header {
             padding: 1.5rem 2rem;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid rgba(184, 132, 95, 0.2); /* Rustic border color */
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
         }
 
         .chat-title {
             font-size: 1.5rem;
             font-weight: 600;
+            color: var(--text-color);
+            letter-spacing: 0.2px; /* Slight letter spacing for rustic feel */
         }
 
         .chat-status {
@@ -311,6 +366,7 @@
             background-color: #F9FAFB;
             border: 1px solid #E5E7EB;
             border-bottom-left-radius: 4px;
+            border-left: 2px solid var(--secondary-color); /* Earthy green accent */
         }
         
         .error-message {
@@ -363,7 +419,8 @@
 
         .chat-input-container {
             padding: 1.5rem 2rem;
-            border-top: 1px solid #E5E7EB;
+            border-top: 1px solid rgba(184, 132, 95, 0.2); /* Rustic border color */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
         }
 
         .chat-input-wrapper {
@@ -447,7 +504,84 @@
             color: var(--white);
         }
 
+        /* Add rustic styling to confirmation summary */
+        .confirmation-summary {
+            background-color: #F9FAFB;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid var(--secondary-color); /* Use earthy green */
+            background-image: var(--wood-texture);
+        }
+
+        .confirmation-item {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+
+        .confirmation-label {
+            font-weight: 600;
+            color: var(--accent-color); /* Use wood tone for labels */
+            min-width: 120px;
+            margin-right: 10px;
+        }
+
+        .confirmation-value {
+            color: var(--text-color);
+            flex: 1;
+            word-break: break-word;
+        }
+
+        /* Calendar picker styles with rustic accents */
+        .calendar-picker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+            max-width: 350px;
+            border: 1px solid rgba(184, 132, 95, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .day-option.selected {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 500;
+            border-color: var(--primary-dark);
+        }
+
         /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: 100vh;
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1.5rem;
+            }
+
+            .chat-container {
+                width: 100%;
+            }
+
+            .tagline {
+                font-size: 1.5rem;
+            }
+
+            .features {
+                display: none;
+            }
+        }
+
+        /* Preserve the additional responsive styles from the Water Consultant template */
         @media (max-width: 768px) {
             html, body {
                 position: relative;
@@ -461,38 +595,7 @@
                 overflow: hidden; /* Prevent body scrolling on mobile */
             }
             
-            .container {
-                flex-direction: column;
-                height: calc(var(--vh, 1vh) * 100);
-                width: 100%;
-                border-radius: 0;
-                overflow: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 1.5rem;
-                max-height: 30vh;
-                min-height: 200px;
-                overflow: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .chat-container {
-                width: 100%;
-                height: 70vh;
-            }
-            
-            .tagline {
-                font-size: 1.5rem;
-            }
-            
-            .features {
-                display: none;
-            }
-            
+            /* Additional mobile fixes from the Water Consultant template */
             .chat-body {
                 -webkit-overflow-scrolling: touch;
                 padding-bottom: 70px; /* Ensure space for input area */
@@ -578,7 +681,7 @@
             }
             
             /* Hide sidebar when keyboard is likely open */
-            @media (max-height: 600px) {
+            @media (max-height: 500px) {
                 .sidebar {
                     display: none;
                 }
@@ -587,34 +690,6 @@
                     height: 100vh;
                 }
             }
-        }
-
-        /* Confirmation summary styles */
-        .confirmation-summary {
-            background-color: #F9FAFB;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 10px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .confirmation-item {
-            display: flex;
-            margin-bottom: 8px;
-            align-items: flex-start;
-        }
-
-        .confirmation-label {
-            font-weight: 600;
-            color: var(--primary-dark);
-            min-width: 120px;
-            margin-right: 10px;
-        }
-
-        .confirmation-value {
-            color: var(--text-color);
-            flex: 1;
-            word-break: break-word;
         }
 
         /* Correction messages */
@@ -745,6 +820,24 @@
             text-align: center;
         }
     </style>
+
+    <!-- Add a wood grain SVG pattern for texture -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <defs>
+            <pattern id="wood-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
+                <rect width="200" height="200" fill="rgba(184,132,95,0.05)"/>
+                <g fill="none" stroke="rgba(164,117,80,0.04)" stroke-width="1.5">
+                    <path d="M0 0 L 200 200"/>
+                    <path d="M100 0 L 200 100"/>
+                    <path d="M0 100 L 100 200"/>
+                    <path d="M50 0 L 200 150"/>
+                    <path d="M0 50 L 150 200"/>
+                    <path d="M150 0 L 200 50"/>
+                    <path d="M0 150 L 54 200"/>
+                </g>
+            </pattern>
+        </defs>
+    </svg>
 </head>
 <body>
     <!-- Language selector overlay -->
@@ -765,7 +858,7 @@
         </div>
     </div>
 
-    <!-- Main content container (initially hidden) -->
+    <!-- Main content container (initially hidden) - English Version -->
     <div class="content-container" id="contentEN">
         <div class="container">
             <div class="sidebar">
@@ -776,7 +869,7 @@
                     <div class="features">
                         <div class="feature">
                             <div class="feature-icon">✓</div>
-                            <div class="feature-text">Whole house water softening systems</div>
+                            <div class="feature-text">Whole-home water softening systems</div>
                         </div>
                         <div class="feature">
                             <div class="feature-icon">✓</div>
@@ -834,8 +927,8 @@
             <div class="sidebar">
                 <div class="sidebar-content">
                     <div class="logo">H2O Prime</div>
-                    <h1 class="tagline">Soluciones premium de agua para su hogar</h1>
-                    <p class="description">Chatea con nuestro experto en calidad de agua para programar tu consulta gratuita y descubrir el sistema de filtración de agua perfecto para tu hogar.</p>
+                    <h1 class="tagline">Soluciones premium de agua para tu hogar</h1>
+                    <p class="description">Chatea con nuestro experto en calidad del agua para programar tu consulta gratuita y descubrir el sistema de filtración perfecto para tu hogar.</p>
                     <div class="features">
                         <div class="feature">
                             <div class="feature-icon">✓</div>
@@ -899,12 +992,22 @@
             
             // Show appropriate content
             if (lang === 'en') {
-                document.getElementById('contentEN').style.display = 'block';
+                const contentEN = document.getElementById('contentEN');
+                contentEN.style.display = 'flex';
+                contentEN.classList.add('visible');
                 initializeChat('en');
             } else if (lang === 'es') {
-                document.getElementById('contentES').style.display = 'block';
+                const contentES = document.getElementById('contentES');
+                contentES.style.display = 'flex';
+                contentES.classList.add('visible');
                 initializeChat('es');
             }
+            
+            // Ensure sidebar is properly styled after content is visible
+            setTimeout(function() {
+                initializeSidebars();
+                fixSidebarHeight();
+            }, 50);
         }
         
         // Core DOM elements
@@ -943,6 +1046,22 @@
                     isValid: zipRegex.test(value),
                     errorMessage: "Please enter a valid 5-digit ZIP code (e.g., 12345).",
                     errorMessageES: "Por favor ingrese un código postal válido de 5 dígitos (ej., 12345)."
+                };
+            },
+            address: (value) => {
+                // Check for street type indicators and minimum length
+                const streetTypeRegex = /\b(st|street|ave|avenue|blvd|boulevard|dr|drive|rd|road|ln|lane|way|place|pl|ct|court|circle|cir|terrace|ter)\b/i;
+                
+                // Check minimum length for a valid address
+                const minLength = 8;
+                
+                // Make comma optional - we'll guide them to add it in the error message
+                const isValid = value.length >= minLength && streetTypeRegex.test(value);
+                
+                return {
+                    isValid: isValid,
+                    errorMessage: "Please enter a complete address including street type (St, Ave, Rd, etc.) and city (e.g., 123 Main St, Phoenix).",
+                    errorMessageES: "Por favor ingrese una dirección completa que incluya el tipo de calle (Calle, Ave, etc.) y la ciudad (ej., 123 Calle Principal, Phoenix)."
                 };
             },
             required: (value) => {
@@ -1057,6 +1176,9 @@
         function correctSpelling(input) {
             if (!input) return input;
             
+            // If we're in English mode, don't use any accented characters
+            const isEnglish = questions === questionsEN;
+            
             let corrected = input;
             
             // Check for email corrections
@@ -1071,12 +1193,30 @@
             const words = corrected.split(/\s+/);
             const correctedWords = words.map(word => {
                 const lowerWord = word.toLowerCase();
-                return spellCorrections[lowerWord] || word;
+                
+                // If we're in English mode, make sure we don't use Spanish corrections
+                if (isEnglish) {
+                    // Only use English corrections (ones without accented characters)
+                    const correction = spellCorrections[lowerWord];
+                    if (correction && !hasAccentedCharacters(correction)) {
+                        return correction;
+                    }
+                    return word;
+                } else {
+                    // In Spanish mode, use any correction
+                    return spellCorrections[lowerWord] || word;
+                }
             });
             
             // Only return the corrected string if something changed
             const newText = correctedWords.join(' ');
             return newText !== input ? newText : input;
+        }
+        
+        // Helper function to detect accented characters
+        function hasAccentedCharacters(str) {
+            // This regex matches common accented characters in Spanish
+            return /[áéíóúüñÁÉÍÓÚÜÑ]/.test(str);
         }
         
         // Webhook configuration
@@ -1418,6 +1558,28 @@
             
             const currentQ = questions[currentQuestion];
             
+            // Check if this question has options and is not multiselect, calendar or clock picker
+            // If so, only allow selecting from the options, not free text entry
+            if (currentQ.options && 
+                !currentQ.multiselect && 
+                !currentQ.isCalendarPicker && 
+                !currentQ.isClockPicker) {
+                
+                // Check if the message matches one of the allowed options
+                const isValidOption = currentQ.options.some(option => 
+                    option.toLowerCase() === userMessage.toLowerCase());
+                
+                if (!isValidOption) {
+                    // Show error message based on language
+                    const errorMessage = questions === questionsEN ? 
+                        "Please select one of the provided options." : 
+                        "Por favor, seleccione una de las opciones proporcionadas.";
+                    
+                    addAgentMessage(errorMessage, null, null, true);
+                    return;
+                }
+            }
+            
             // Validate input if validation is specified
             if (currentQ.validation) {
                 const validator = validators[currentQ.validation];
@@ -1443,6 +1605,9 @@
                 window.selectedTimeOfDay = userMessage;
             }
             
+            // Disable all option buttons for previous questions
+            disablePreviousOptions();
+            
             // Process user response for current question
             const handledQuestionAdvancement = processUserResponse(userMessage, currentQ);
             
@@ -1454,11 +1619,19 @@
                 // If the response handling function already updated the currentQuestion, don't proceed with normal flow
                 if (handledQuestionAdvancement) {
                     const nextQ = questions[currentQuestion];
-                    // Replace any placeholder text with actual user input
+                    
+                    // If we're in correction mode, use custom correction prompts
                     let nextText = nextQ.text;
-                    for (const field in formData) {
-                        nextText = nextText.replace(`{${field}}`, formData[field]);
+                    if (isCorrectingField()) {
+                        const lang = questions === questionsEN ? 'en' : 'es';
+                        nextText = getCorrectionPrompt(fieldsToCorrect[currentCorrectionIndex-1], lang);
+                    } else {
+                        // Replace any placeholder text with actual user input
+                        for (const field in formData) {
+                            nextText = nextText.replace(`{${field}}`, formData[field]);
+                        }
                     }
+                    
                     hideTypingIndicator();
                     addAgentMessage(nextText, nextQ.options, nextQ.multiselect);
                     return;
@@ -1499,20 +1672,54 @@
             }, 1000 + Math.random() * 1000); // Realistic typing delay
         }
         
+        // Function to disable all option buttons for previous questions
+        function disablePreviousOptions() {
+            const optionsContainers = document.querySelectorAll('.options-container');
+            
+            optionsContainers.forEach(container => {
+                // Check if this container is for a previous question
+                if (container.dataset.questionId) {
+                    const questionId = container.dataset.questionId;
+                    const questionIndex = questions.findIndex(q => q.id === questionId);
+                    
+                    // If this is a previous question, disable its option buttons
+                    if (questionIndex < currentQuestion) {
+                        const optionButtons = container.querySelectorAll('.option-button');
+                        optionButtons.forEach(button => {
+                            button.disabled = true;
+                            button.style.opacity = '0.5';
+                            button.style.cursor = 'not-allowed';
+                            button.style.pointerEvents = 'none'; /* Prevent any click interactions */
+                            
+                            // Remove event listeners by cloning and replacing
+                            const newButton = button.cloneNode(true);
+                            button.parentNode.replaceChild(newButton, button);
+                        });
+                    }
+                }
+            });
+        }
+        
         // Process user response for a question
         function processUserResponse(response, question) {
-            // Check for possible spelling corrections
-            const corrected = correctSpelling(response);
+            // Track which language we're using
+            const isEnglish = questions === questionsEN;
             
-            // If we corrected something, let the user know
-            if (corrected !== response) {
-                setTimeout(() => {
-                    const correctionMessage = questions === questionsEN ? 
-                        `I've updated your response to: "${corrected}"` : 
-                        `He actualizado tu respuesta a: "${corrected}"`;
-                    addAgentMessage(correctionMessage, null, null, false, true);
-                }, 500);
-                response = corrected;
+            // Check for possible spelling corrections only if not correcting fields
+            // This prevents incorrect language switching during corrections
+            if (!isCorrectingField()) {
+                const corrected = correctSpelling(response);
+                
+                // If we corrected something, let the user know
+                if (corrected !== response) {
+                    setTimeout(() => {
+                        const correctionMessage = isEnglish ? 
+                            `I've updated your response to: "${corrected}"` : 
+                            `He actualizado tu respuesta a: "${corrected}"`;
+                        addAgentMessage(correctionMessage, null, null, false, true);
+                    }, 500);
+                    response = corrected;
+                }
             }
             
             formData[question.field] = response;
@@ -1527,10 +1734,10 @@
             // Special handling for confirmation response
             if (question.id === 'confirmationSummary') {
                 // Handle based on language
-                const yesOption = questions === questionsEN ? 
+                const yesOption = isEnglish ? 
                     'Yes, schedule my consultation' : 
                     'Sí, programa mi consulta';
-                const noOption = questions === questionsEN ? 
+                const noOption = isEnglish ? 
                     'No, I need to make changes' : 
                     'No, necesito hacer cambios';
                 
@@ -1562,11 +1769,46 @@
                 currentCorrectionIndex = 0;
                 
                 if (fieldsToCorrect.length > 0) {
+                    // Set a flag indicating we're in correction mode
+                    window.isInCorrectionMode = true;
+                    
+                    // Remember current language to maintain consistency
+                    window.correctionLanguage = isEnglish ? 'en' : 'es';
+                    
                     // Find the question for the first field to correct
                     for (let i = 0; i < questions.length; i++) {
                         if (questions[i].field === fieldsToCorrect[currentCorrectionIndex]) {
                             currentQuestion = i;
+                            
+                            // Store the current position in the survey to return later
+                            window.returnToQuestionAfterCorrection = questions.findIndex(q => q.id === 'confirmationSummary');
+                            
                             return true; // Signal that we've handled the question advancement
+                        }
+                    }
+                }
+            }
+            
+            // Handle field correction completion
+            if (isCorrectingField()) {
+                // Check if the current field being corrected matches the current question
+                if (question.field === fieldsToCorrect[currentCorrectionIndex]) {
+                    currentCorrectionIndex++;
+                    
+                    // If we've corrected all fields, return to the confirmation summary
+                    if (currentCorrectionIndex >= fieldsToCorrect.length && window.returnToQuestionAfterCorrection) {
+                        currentQuestion = window.returnToQuestionAfterCorrection;
+                        fieldsToCorrect = [];
+                        currentCorrectionIndex = 0;
+                        window.isInCorrectionMode = false; // Reset correction mode flag
+                        return true; // Signal that we've handled the question advancement
+                    } else if (currentCorrectionIndex < fieldsToCorrect.length) {
+                        // Move to the next field to correct
+                        for (let i = 0; i < questions.length; i++) {
+                            if (questions[i].field === fieldsToCorrect[currentCorrectionIndex]) {
+                                currentQuestion = i;
+                                return true; // Signal that we've handled the question advancement
+                            }
                         }
                     }
                 }
@@ -1575,12 +1817,64 @@
             return false; // Signal that we haven't handled the question advancement
         }
         
+        // Helper function to check if we're currently correcting fields
+        function isCorrectingField() {
+            return window.isInCorrectionMode === true && fieldsToCorrect && fieldsToCorrect.length > 0;
+        }
+        
+        // Get simplified correction prompts for each field
+        function getCorrectionPrompt(fieldName, language) {
+            const isEnglish = language === 'en';
+            
+            // Safety check to prevent undefined fields
+            if (!fieldName) {
+                return isEnglish ? 
+                    "Please correct this information:" : 
+                    "Por favor, corrija esta información:";
+            }
+            
+            // English correction prompts
+            const englishPrompts = {
+                'Full Name': "Please correct your full name below:",
+                'Email': "Please provide the correct email address:",
+                'Phone Number': "Please enter the correct phone number:",
+                'Address': "Please provide the correct address including street type (St, Ave, Rd, etc.) and city:",
+                'Zip Code': "Please enter the correct ZIP code:",
+                'Water Source': "Please select the correct water source:",
+                'Current System': "Please select the correct water filtration system you currently have:"
+            };
+            
+            // Spanish correction prompts
+            const spanishPrompts = {
+                'Nombre Completo': "Por favor, corrija su nombre completo a continuación:",
+                'Correo Electrónico': "Por favor, proporcione la dirección de correo electrónico correcta:",
+                'Número de Teléfono': "Por favor, ingrese el número de teléfono correcto:",
+                'Dirección': "Por favor, proporcione la dirección correcta incluyendo el tipo de calle y la ciudad:",
+                'Código Postal': "Por favor, ingrese el código postal correcto:",
+                'Fuente de Agua': "Por favor, seleccione la fuente de agua correcta:",
+                'Sistema Actual': "Por favor, seleccione el sistema de filtración de agua que tiene actualmente:"
+            };
+            
+            return isEnglish ? 
+                (englishPrompts[fieldName] || `Please correct your ${fieldName}:`) : 
+                (spanishPrompts[fieldName] || `Por favor, corrija su ${fieldName}:`);
+        }
+        
         // Submit all collected data to webhook
         function submitFormData() {
+            // Disable chat input and button after final submission
+            chatInput.disabled = true;
+            sendButton.disabled = true;
+            chatInput.placeholder = questions === questionsEN ? 
+                "Chat completed. Thank you!" : 
+                "Chat completado. ¡Gracias!";
+            
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': window.location.origin
                 },
                 body: JSON.stringify({
                     conversationId: conversationId,
@@ -1590,20 +1884,50 @@
                     language: questions === questionsEN ? 'en' : 'es'
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                // Check if response exists and can be parsed as JSON
+                if (response.ok) {
+                    return response.json().catch(() => {
+                        // If JSON parsing fails, return a default object
+                        return { response: null };
+                    });
+                }
+                // For non-OK responses, create a default object
+                return { response: null };
+            })
             .then(data => {
                 hideTypingIndicator();
-                if (data.response) {
+                
+                // If there's a response from the webhook, display it
+                if (data && data.response) {
                     addAgentMessage(data.response);
+                } else {
+                    // If no webhook response, display the final message from our preset messages
+                    const finalMessage = questions[questions.length - 1].text;
+                    let finalText = finalMessage;
+                    
+                    // Replace any placeholder text with actual user input
+                    for (const field in formData) {
+                        finalText = finalText.replace(`{${field}}`, formData[field]);
+                    }
+                    
+                    addAgentMessage(finalText);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 hideTypingIndicator();
-                const errorMessage = questions === questionsEN ?
-                    "I'm sorry, I wasn't able to process your information. Please try again later or call us at (555) 123-4567." :
-                    "Lo siento, no pude procesar tu información. Por favor, inténtalo de nuevo más tarde o llámanos al (555) 123-4567.";
-                addAgentMessage(errorMessage);
+                
+                // Display final message anyway even if there's an error with the webhook
+                const finalMessage = questions[questions.length - 1].text;
+                let finalText = finalMessage;
+                
+                // Replace any placeholder text with actual user input
+                for (const field in formData) {
+                    finalText = finalText.replace(`{${field}}`, formData[field]);
+                }
+                
+                addAgentMessage(finalText);
             });
         }
         
@@ -1640,7 +1964,7 @@
                         { label: 'Address', field: 'Address' },
                         { label: 'ZIP Code', field: 'Zip Code' },
                         { label: 'Water Source', field: 'Water Source' },
-                        { label: 'System Interest', field: 'Interested System' }
+                        { label: 'Current System', field: 'Current System' }
                     ] : 
                     [
                         { label: 'Nombre', field: 'Nombre Completo' },
@@ -1649,7 +1973,7 @@
                         { label: 'Dirección', field: 'Dirección' },
                         { label: 'Código Postal', field: 'Código Postal' },
                         { label: 'Fuente de Agua', field: 'Fuente de Agua' },
-                        { label: 'Sistema de Interés', field: 'Sistema de Interés' }
+                        { label: 'Sistema Actual', field: 'Sistema Actual' }
                     ];
                 
                 confirmationFields.forEach(item => {
@@ -1741,6 +2065,9 @@
                             
                             // Set the input value to the full date
                             chatInput.value = formattedDate;
+                            
+                            // Focus the input after selecting a date
+                            chatInput.focus();
                         });
                         
                         calendarPicker.appendChild(dayOption);
@@ -1822,6 +2149,9 @@
                                 chatInput.value = `${hour} ${defaultPeriod}`;
                             }
                         }
+                        
+                        // Focus the input after selecting a time
+                        chatInput.focus();
                     });
                     
                     clockPicker.appendChild(timeOption);
@@ -1853,6 +2183,8 @@
                     if (selectedHour) {
                         // Set the input value to the full time
                         chatInput.value = `${selectedHour.textContent} AM`;
+                        // Focus the input after selecting AM/PM
+                        chatInput.focus();
                     }
                 });
                 
@@ -1878,6 +2210,8 @@
                     if (selectedHour) {
                         // Set the input value to the full time
                         chatInput.value = `${selectedHour.textContent} PM`;
+                        // Focus the input after selecting AM/PM
+                        chatInput.focus();
                     }
                 });
                 
@@ -1904,6 +2238,8 @@
             if (options && options.length && !currentQ.isCalendarPicker && !currentQ.isClockPicker) {
                 const optionsContainer = document.createElement('div');
                 optionsContainer.className = 'options-container';
+                // Add a unique ID to this options container for the current question
+                optionsContainer.dataset.questionId = currentQ.id;
                 
                 options.forEach(option => {
                     const optionButton = document.createElement('button');
@@ -1919,6 +2255,8 @@
                             } else {
                                 chatInput.value = option;
                             }
+                            // Focus the input after selecting an option
+                            chatInput.focus();
                         } else {
                             // For single select, immediately submit the option
                             chatInput.value = option;
@@ -1933,6 +2271,14 @@
             
             chatBody.appendChild(messageDiv);
             scrollToBottom();
+            
+            // Auto-focus the input field after showing a new message
+            if (!options || options.length === 0) {
+                chatInput.focus();
+            }
+            
+            // Immediately disable options from previous questions to prevent interaction
+            disablePreviousOptions();
         }
         
         // Add user message to chat
@@ -1974,6 +2320,191 @@
             document.documentElement.style.setProperty('--vh', `${vh}px`);
         }
         
+        // Pre-initialize sidebars function
+        function initializeSidebars() {
+            console.log("Initializing sidebars...");
+            const sidebars = document.querySelectorAll('.sidebar');
+            if (sidebars.length > 0) {
+                console.log("Found " + sidebars.length + " sidebars");
+                // Make sidebars visible for initialization
+                sidebars.forEach(sidebar => {
+                    // Store original display value
+                    const originalDisplay = sidebar.style.display;
+                    // Make temporarily visible if needed
+                    sidebar.style.display = 'flex';
+                    
+                    // Apply all sidebar styling
+                    sidebar.style.background = 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))';
+                    sidebar.style.color = '#FFFFFF';
+                    sidebar.style.width = '38%';
+                    sidebar.style.minWidth = '300px';
+                    sidebar.style.flex = '0 0 38%';
+                    sidebar.style.padding = '2rem';
+                    sidebar.style.position = 'relative';
+                    sidebar.style.overflow = 'hidden';
+                    
+                    // Apply styling to sidebar content
+                    const sidebarContent = sidebar.querySelector('.sidebar-content');
+                    if (sidebarContent) {
+                        sidebarContent.style.position = 'relative';
+                        sidebarContent.style.zIndex = '1';
+                        sidebarContent.style.height = '100%';
+                        sidebarContent.style.display = 'flex';
+                        sidebarContent.style.flexDirection = 'column';
+                    }
+                    
+                    // Apply styling to features section
+                    const features = sidebar.querySelector('.features');
+                    if (features) {
+                        features.style.marginTop = 'auto';
+                        features.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                        features.style.padding = '1.2rem';
+                        features.style.borderRadius = '12px';
+                        features.style.borderLeft = '3px solid var(--secondary-color)';
+                        features.style.display = 'block';
+                    }
+                    
+                    // Restore original display if needed
+                    if (originalDisplay) {
+                        sidebar.style.display = originalDisplay;
+                    }
+                });
+            }
+        }
+        
+        // Force sidebar consistent appearance for both languages
+        function fixSidebarHeight() {
+            // Ensure the sidebar layout is consistent across both language versions
+            const sidebars = document.querySelectorAll('.sidebar');
+            sidebars.forEach(sidebar => {
+                sidebar.style.minHeight = '150px';
+                sidebar.style.maxHeight = 'none'; // Remove height restriction
+                sidebar.style.height = 'auto'; // Let it take natural height
+                sidebar.style.minWidth = '300px'; // Ensure minimum width
+                sidebar.style.width = '38%'; // Match CSS width
+                sidebar.style.flex = '0 0 38%'; // Prevent shrinking
+                
+                // Ensure the sidebar background and textures are applied
+                sidebar.style.background = 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))';
+                sidebar.style.position = 'relative';
+                sidebar.style.overflow = 'hidden';
+                sidebar.style.display = 'flex';
+                sidebar.style.flexDirection = 'column';
+                sidebar.style.padding = '2rem';
+                
+                // Make sure the pseudo-elements are properly styled
+                // We need to add these manually since we can't directly style pseudo-elements with JS
+                if (!sidebar.querySelector('.sidebar-overlay-texture')) {
+                    const textureOverlay = document.createElement('div');
+                    textureOverlay.className = 'sidebar-overlay-texture';
+                    textureOverlay.style.position = 'absolute';
+                    textureOverlay.style.top = '0';
+                    textureOverlay.style.left = '0';
+                    textureOverlay.style.width = '100%';
+                    textureOverlay.style.height = '100%';
+                    textureOverlay.style.backgroundImage = 'var(--wood-texture)';
+                    textureOverlay.style.opacity = '0.05';
+                    textureOverlay.style.zIndex = '0';
+                    sidebar.appendChild(textureOverlay);
+                }
+                
+                if (!sidebar.querySelector('.sidebar-overlay-gradient')) {
+                    const gradientOverlay = document.createElement('div');
+                    gradientOverlay.className = 'sidebar-overlay-gradient';
+                    gradientOverlay.style.position = 'absolute';
+                    gradientOverlay.style.top = '-50%';
+                    gradientOverlay.style.left = '-50%';
+                    gradientOverlay.style.width = '200%';
+                    gradientOverlay.style.height = '200%';
+                    gradientOverlay.style.background = 'radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)';
+                    gradientOverlay.style.transform = 'rotate(20deg)';
+                    gradientOverlay.style.zIndex = '0';
+                    sidebar.appendChild(gradientOverlay);
+                }
+            });
+            
+            // Force visibility of logo and tagline on mobile
+            const logos = document.querySelectorAll('.logo');
+            const taglines = document.querySelectorAll('.tagline');
+            const descriptions = document.querySelectorAll('.description');
+            const featuresElements = document.querySelectorAll('.features');
+            
+            logos.forEach(logo => {
+                logo.style.display = 'block';
+                logo.style.textShadow = '1px 1px 3px rgba(0, 0, 0, 0.2)';
+                logo.style.letterSpacing = '0.5px';
+                logo.style.fontSize = '2rem';
+                logo.style.fontWeight = '700';
+                logo.style.marginBottom = '2rem';
+            });
+            
+            taglines.forEach(tagline => {
+                tagline.style.display = 'block';
+                tagline.style.textShadow = '1px 1px 3px rgba(0, 0, 0, 0.15)';
+                tagline.style.fontSize = '2.2rem';
+                tagline.style.fontWeight = '700';
+                tagline.style.lineHeight = '1.3';
+                tagline.style.marginBottom = '1.5rem';
+            });
+            
+            descriptions.forEach(desc => {
+                desc.style.display = 'block';
+                desc.style.fontSize = '1.1rem';
+                desc.style.fontWeight = '400';
+                desc.style.lineHeight = '1.6';
+                desc.style.marginBottom = '2rem';
+                desc.style.letterSpacing = '0.2px';
+            });
+            
+            featuresElements.forEach(feature => {
+                feature.style.display = 'block';
+                feature.style.marginTop = 'auto';
+                feature.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+                feature.style.padding = '1.2rem';
+                feature.style.borderRadius = '12px';
+                feature.style.borderLeft = '3px solid var(--secondary-color)';
+            });
+            
+            // Ensure sidebar content is above overlays
+            const sidebarContents = document.querySelectorAll('.sidebar-content');
+            sidebarContents.forEach(content => {
+                content.style.position = 'relative';
+                content.style.zIndex = '1';
+                content.style.height = '100%';
+                content.style.display = 'flex';
+                content.style.flexDirection = 'column';
+            });
+            
+            // Style feature boxes with rustic elements
+            const featureItems = document.querySelectorAll('.feature');
+            featureItems.forEach(item => {
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.marginBottom = '1rem';
+            });
+            
+            const featureIcons = document.querySelectorAll('.feature-icon');
+            featureIcons.forEach(icon => {
+                icon.style.background = 'rgba(255, 255, 255, 0.2)';
+                icon.style.width = '36px';
+                icon.style.height = '36px';
+                icon.style.borderRadius = '50%';
+                icon.style.display = 'flex';
+                icon.style.alignItems = 'center';
+                icon.style.justifyContent = 'center';
+                icon.style.marginRight = '1rem';
+                icon.style.flexShrink = '0';
+                icon.style.border = '1px solid rgba(255, 255, 255, 0.3)';
+            });
+            
+            const featureTexts = document.querySelectorAll('.feature-text');
+            featureTexts.forEach(text => {
+                text.style.fontSize = '0.9rem';
+                text.style.wordWrap = 'break-word';
+                text.style.overflowWrap = 'break-word';
+            });
+        }
+        
         // Run when page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Set initial height
@@ -1984,8 +2515,92 @@
                 el.style.webkitOverflowScrolling = 'touch';
             });
             
+            // Initialize sidebars immediately
+            initializeSidebars();
+            
+            // Call immediately and on resize
+            fixSidebarHeight();
+            window.addEventListener('resize', fixSidebarHeight);
+            
             // Improve touch handling on mobile
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                // Extra fixes for iOS
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    // Force correct height calculations
+                    setVH();
+                    window.addEventListener('resize', setVH);
+                    window.addEventListener('scroll', setVH);
+                    
+                    // Fix for scrolling issues on iOS
+                    document.querySelectorAll('.chat-body').forEach(el => {
+                        el.style.webkitOverflowScrolling = 'touch';
+                        
+                        // Fix for iOS momentum scrolling
+                        el.addEventListener('touchstart', function() {
+                            const top = this.scrollTop;
+                            const totalScroll = this.scrollHeight;
+                            const currentScroll = top + this.offsetHeight;
+                            
+                            if (top === 0) {
+                                this.scrollTop = 1;
+                            } else if (currentScroll === totalScroll) {
+                                this.scrollTop = top - 1;
+                            }
+                        });
+                    });
+                }
+                
+                // Special mobile sidebar handling
+                function adjustSidebarForMobile() {
+                    const sidebars = document.querySelectorAll('.sidebar');
+                    if (window.innerWidth <= 768) {
+                        // Mobile view
+                        sidebars.forEach(sidebar => {
+                            sidebar.style.width = '100%';
+                            sidebar.style.minWidth = '100%';
+                            sidebar.style.flex = '1 0 auto';
+                            sidebar.style.height = 'auto';
+                            sidebar.style.maxHeight = 'none';
+                            
+                            // Adjust content for mobile
+                            const tagline = sidebar.querySelector('.tagline');
+                            if (tagline) {
+                                tagline.style.fontSize = '1.5rem';
+                            }
+                            
+                            // Show/hide features based on space
+                            const features = sidebar.querySelector('.features');
+                            if (features) {
+                                if (window.innerHeight < 600) {
+                                    features.style.display = 'none';
+                                } else {
+                                    features.style.display = 'block';
+                                }
+                            }
+                        });
+                    } else {
+                        // Desktop view
+                        sidebars.forEach(sidebar => {
+                            sidebar.style.width = '38%';
+                            sidebar.style.minWidth = '300px';
+                            sidebar.style.flex = '0 0 38%';
+                            
+                            // Restore features visibility
+                            const features = sidebar.querySelector('.features');
+                            if (features) {
+                                features.style.display = 'block';
+                            }
+                        });
+                    }
+                }
+                
+                // Call immediately and on resize
+                adjustSidebarForMobile();
+                window.addEventListener('resize', adjustSidebarForMobile);
+                window.addEventListener('orientationchange', function() {
+                    setTimeout(adjustSidebarForMobile, 100);
+                });
+                
                 // Fix for option buttons, day options, and time options
                 document.addEventListener('click', function(e) {
                     if (e.target.classList.contains('option-button') || 
@@ -2021,6 +2636,19 @@
                             }
                         }, 300);
                     });
+                    
+                    // Restore sidebar when input is blurred
+                    input.addEventListener('blur', function() {
+                        setTimeout(() => {
+                            if (window.innerHeight >= 500) {
+                                const sidebar = document.querySelector('.sidebar');
+                                if (sidebar) {
+                                    sidebar.style.display = 'flex';
+                                    adjustSidebarForMobile(); // Re-apply mobile styling
+                                }
+                            }
+                        }, 300);
+                    });
                 });
             }
         });
@@ -2030,6 +2658,7 @@
         window.addEventListener('orientationchange', function() {
             // Small delay to ensure orientation change is complete
             setTimeout(setVH, 100);
+            setTimeout(setVH, 500); // Additional call to handle iOS orientation change delay
         });
     </script>
 </body>
