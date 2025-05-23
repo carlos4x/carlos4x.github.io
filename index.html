@@ -16,7 +16,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>H2O Prime | Premium Water Filtration Solutions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <!-- Add a timestamp to force browsers to recognize this as a new page -->
-    <meta name="version" content="v1.8.<?php echo time(); ?>">
+    <meta name="version" content="v1.9.<?php echo time(); ?>">
     <style>
         :root {
             --primary-color: #0073CF;
@@ -566,10 +566,14 @@
                 width: 100%;
                 height: auto;
                 padding: 1.5rem;
+                max-height: 60vh; /* Limit sidebar height on mobile */
+                overflow-y: auto; /* Allow scrolling within sidebar if needed */
             }
 
             .chat-container {
                 width: 100%;
+                height: auto; /* Allow chat container to expand */
+                min-height: 40vh; /* Ensure chat area is visible */
             }
 
             .tagline {
@@ -577,7 +581,15 @@
             }
 
             .features {
-                display: none;
+                display: block; /* Keep features visible on mobile */
+                margin-bottom: 1rem;
+            }
+            
+            /* Ensure the content container takes full height but allows scrolling */
+            .content-container.visible {
+                height: 100%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
         }
 
@@ -585,14 +597,14 @@
         @media (max-width: 768px) {
             html, body {
                 position: relative;
-                overflow: auto;
+                overflow: auto; /* Allow scrolling */
                 -webkit-overflow-scrolling: touch;
                 height: 100%;
                 width: 100%;
             }
             
             body {
-                overflow: hidden; /* Prevent body scrolling on mobile */
+                overflow-y: auto; /* Allow vertical scrolling */
             }
             
             /* Additional mobile fixes from the Water Consultant template */
@@ -1007,6 +1019,33 @@
             setTimeout(function() {
                 initializeSidebars();
                 fixSidebarHeight();
+                
+                // Apply iPhone-specific fixes if needed
+                if (/iPhone/.test(navigator.userAgent)) {
+                    fixIPhoneLayout();
+                    
+                    // Force redraw of container structure
+                    const containers = document.querySelectorAll('.container');
+                    containers.forEach(container => {
+                        // Trigger browser reflow
+                        container.style.display = 'none';
+                        container.offsetHeight; // Force reflow
+                        container.style.display = 'flex';
+                        
+                        // Ensure chat container is visible
+                        const chatContainer = container.querySelector('.chat-container');
+                        if (chatContainer) {
+                            chatContainer.style.display = 'flex';
+                            chatContainer.style.flex = '1 1 auto';
+                            chatContainer.style.minHeight = '50vh';
+                        }
+                    });
+                    
+                    // Scroll to ensure chat area is visible
+                    setTimeout(function() {
+                        window.scrollTo(0, 1);
+                    }, 100);
+                }
             }, 50);
         }
         
@@ -2522,6 +2561,59 @@
             fixSidebarHeight();
             window.addEventListener('resize', fixSidebarHeight);
             
+            // Fix for iPhone layout issues - force proper display of container structure
+            function fixIPhoneLayout() {
+                // Check if it's an iPhone
+                const isIPhone = /iPhone/.test(navigator.userAgent);
+                if (isIPhone) {
+                    // Get the container and adjust its layout
+                    const containers = document.querySelectorAll('.container');
+                    containers.forEach(container => {
+                        // Set explicit height and ensure flex column layout
+                        container.style.display = 'flex';
+                        container.style.flexDirection = 'column';
+                        container.style.height = '100%';
+                        container.style.maxHeight = '100vh';
+                        container.style.overflowY = 'auto';
+                        
+                        // Ensure sidebar doesn't take too much space
+                        const sidebar = container.querySelector('.sidebar');
+                        if (sidebar) {
+                            sidebar.style.maxHeight = '50vh';
+                            sidebar.style.flex = '0 0 auto';
+                        }
+                        
+                        // Ensure chat container is visible and takes remaining space
+                        const chatContainer = container.querySelector('.chat-container');
+                        if (chatContainer) {
+                            chatContainer.style.flex = '1 1 auto';
+                            chatContainer.style.display = 'flex';
+                            chatContainer.style.flexDirection = 'column';
+                            chatContainer.style.minHeight = '50vh';
+                            
+                            // Make sure chat body takes available space
+                            const chatBody = chatContainer.querySelector('.chat-body');
+                            if (chatBody) {
+                                chatBody.style.flex = '1 1 auto';
+                            }
+                        }
+                    });
+                    
+                    // Force body to allow scrolling
+                    document.body.style.overflow = 'auto';
+                    document.body.style.height = 'auto';
+                    document.documentElement.style.overflow = 'auto';
+                    document.documentElement.style.height = 'auto';
+                }
+            }
+            
+            // Run iPhone fixes immediately and on resize/orientation change
+            fixIPhoneLayout();
+            window.addEventListener('resize', fixIPhoneLayout);
+            window.addEventListener('orientationchange', function() {
+                setTimeout(fixIPhoneLayout, 100);
+            });
+            
             // Improve touch handling on mobile
             if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                 // Extra fixes for iOS
@@ -2560,7 +2652,8 @@
                             sidebar.style.minWidth = '100%';
                             sidebar.style.flex = '1 0 auto';
                             sidebar.style.height = 'auto';
-                            sidebar.style.maxHeight = 'none';
+                            sidebar.style.maxHeight = '60vh'; // Match the CSS max-height
+                            sidebar.style.overflowY = 'auto'; // Allow scrolling within sidebar
                             
                             // Adjust content for mobile
                             const tagline = sidebar.querySelector('.tagline');
@@ -2568,15 +2661,29 @@
                                 tagline.style.fontSize = '1.5rem';
                             }
                             
-                            // Show/hide features based on space
+                            // Show features but keep compact
                             const features = sidebar.querySelector('.features');
                             if (features) {
-                                if (window.innerHeight < 600) {
-                                    features.style.display = 'none';
-                                } else {
-                                    features.style.display = 'block';
-                                }
+                                features.style.display = 'block';
+                                features.style.marginBottom = '1rem';
+                                features.style.padding = '0.8rem';
                             }
+                        });
+                        
+                        // Ensure chat container is visible
+                        const chatContainers = document.querySelectorAll('.chat-container');
+                        chatContainers.forEach(container => {
+                            container.style.height = 'auto';
+                            container.style.minHeight = '40vh';
+                            container.style.display = 'flex';
+                        });
+                        
+                        // Make content containers scrollable
+                        const contentContainers = document.querySelectorAll('.content-container.visible');
+                        contentContainers.forEach(container => {
+                            container.style.height = '100%';
+                            container.style.overflowY = 'auto';
+                            container.style.WebkitOverflowScrolling = 'touch';
                         });
                     } else {
                         // Desktop view
@@ -2584,12 +2691,22 @@
                             sidebar.style.width = '38%';
                             sidebar.style.minWidth = '300px';
                             sidebar.style.flex = '0 0 38%';
+                            sidebar.style.maxHeight = 'none';
                             
                             // Restore features visibility
                             const features = sidebar.querySelector('.features');
                             if (features) {
                                 features.style.display = 'block';
+                                features.style.marginBottom = '0';
+                                features.style.padding = '1.2rem';
                             }
+                        });
+                        
+                        // Reset chat container styles
+                        const chatContainers = document.querySelectorAll('.chat-container');
+                        chatContainers.forEach(container => {
+                            container.style.height = '';
+                            container.style.minHeight = '';
                         });
                     }
                 }
