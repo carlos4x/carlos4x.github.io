@@ -26,7 +26,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <!-- Add a timestamp to force browsers to recognize this as a new page -->
-    <meta name="version" content="v1.9.<?php echo time(); ?>">
+    <meta name="version" content="v2.0.<?php echo time(); ?>">
     <style>
         :root {
             --primary-color: #0073CF;
@@ -593,6 +593,50 @@
             }
         }
 
+        /* iPhone-specific styles - make survey form more prominent */
+        @media (max-width: 428px) {
+            .sidebar {
+                max-height: 30vh; /* Further limit sidebar height on iPhone */
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .description {
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .features {
+                display: none; /* Hide features on iPhone */
+            }
+            
+            .chat-container {
+                min-height: 70vh; /* Make chat container take more space */
+            }
+            
+            .chat-header {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .chat-input-container {
+                background-color: #ffffff;
+                box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            }
+        }
+
         /* Preserve the additional responsive styles from the Water Consultant template */
         @media (max-width: 768px) {
             html, body {
@@ -1032,19 +1076,25 @@
                         container.offsetHeight; // Force reflow
                         container.style.display = 'flex';
                         
-                        // Ensure chat container is visible
+                        // Ensure chat container is visible and prominent
                         const chatContainer = container.querySelector('.chat-container');
                         if (chatContainer) {
                             chatContainer.style.display = 'flex';
                             chatContainer.style.flex = '1 1 auto';
-                            chatContainer.style.minHeight = '50vh';
+                            chatContainer.style.minHeight = '70vh';
+                        }
+                        
+                        // Make sidebar less prominent
+                        const sidebar = container.querySelector('.sidebar');
+                        if (sidebar) {
+                            sidebar.style.maxHeight = '30vh';
                         }
                     });
                     
-                    // Scroll to ensure chat area is visible
+                    // Scroll to ensure chat area is visible and prominent
                     setTimeout(function() {
-                        window.scrollTo(0, 1);
-                    }, 100);
+                        window.scrollTo(0, window.innerHeight * 0.25);
+                    }, 300);
                 }
             }, 50);
         }
@@ -2576,25 +2626,71 @@
                         container.style.maxHeight = '100vh';
                         container.style.overflowY = 'auto';
                         
-                        // Ensure sidebar doesn't take too much space
+                        // Make sidebar much less prominent on iPhone
                         const sidebar = container.querySelector('.sidebar');
                         if (sidebar) {
-                            sidebar.style.maxHeight = '50vh';
+                            sidebar.style.maxHeight = '30vh'; // Reduce from 50vh to 30vh
                             sidebar.style.flex = '0 0 auto';
+                            sidebar.style.padding = '1rem'; // Reduce padding
+                            
+                            // Make sidebar content more compact
+                            const logo = sidebar.querySelector('.logo');
+                            if (logo) {
+                                logo.style.fontSize = '1.5rem';
+                                logo.style.marginBottom = '0.5rem';
+                            }
+                            
+                            const tagline = sidebar.querySelector('.tagline');
+                            if (tagline) {
+                                tagline.style.fontSize = '1.2rem';
+                                tagline.style.marginBottom = '0.5rem';
+                            }
+                            
+                            const description = sidebar.querySelector('.description');
+                            if (description) {
+                                description.style.fontSize = '0.9rem';
+                                description.style.marginBottom = '0.5rem';
+                            }
+                            
+                            // Hide features section completely on iPhone to save space
+                            const features = sidebar.querySelector('.features');
+                            if (features) {
+                                features.style.display = 'none';
+                            }
                         }
                         
-                        // Ensure chat container is visible and takes remaining space
+                        // Make chat container (survey form) much more prominent
                         const chatContainer = container.querySelector('.chat-container');
                         if (chatContainer) {
                             chatContainer.style.flex = '1 1 auto';
                             chatContainer.style.display = 'flex';
                             chatContainer.style.flexDirection = 'column';
-                            chatContainer.style.minHeight = '50vh';
+                            chatContainer.style.minHeight = '70vh'; // Increase from 50vh to 70vh
                             
-                            // Make sure chat body takes available space
+                            // Enhance chat header visibility
+                            const chatHeader = chatContainer.querySelector('.chat-header');
+                            if (chatHeader) {
+                                chatHeader.style.backgroundColor = '#ffffff';
+                                chatHeader.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                                chatHeader.style.position = 'sticky';
+                                chatHeader.style.top = '0';
+                                chatHeader.style.zIndex = '10';
+                            }
+                            
+                            // Make sure chat body takes available space and is clearly visible
                             const chatBody = chatContainer.querySelector('.chat-body');
                             if (chatBody) {
                                 chatBody.style.flex = '1 1 auto';
+                                chatBody.style.backgroundColor = '#ffffff';
+                                chatBody.style.paddingTop = '1rem';
+                            }
+                            
+                            // Make chat input area more prominent
+                            const chatInputContainer = chatContainer.querySelector('.chat-input-container');
+                            if (chatInputContainer) {
+                                chatInputContainer.style.backgroundColor = '#ffffff';
+                                chatInputContainer.style.boxShadow = '0 -2px 4px rgba(0,0,0,0.1)';
+                                chatInputContainer.style.padding = '1rem';
                             }
                         }
                     });
@@ -2604,6 +2700,11 @@
                     document.body.style.height = 'auto';
                     document.documentElement.style.overflow = 'auto';
                     document.documentElement.style.height = 'auto';
+                    
+                    // Scroll down slightly to focus on the chat container
+                    setTimeout(function() {
+                        window.scrollTo(0, window.innerHeight * 0.25); // Scroll down 25% of viewport height
+                    }, 300);
                 }
             }
             
