@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --primary-light: #818CF8;
+            --primary-dark: #4338CA;
+            --secondary-color: #10B981;
+            --text-color: #1F2937;
+            --text-light: #6B7280;
+            --background-color: #F3F4F6;
+            --white: #FFFFFF;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --border-radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 35%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--white);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: rotate(20deg);
+            z-index: 0;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .tagline {
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+        }
+
+        .description {
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            margin-top: auto;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+        }
+
+        .chat-container {
+            width: 65%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .chat-status {
+            font-size: 0.875rem;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .agent-message {
+            align-self: flex-start;
+        }
+
+        .user-message {
+            align-self: flex-end;
+        }
+
+        .message-content {
+            padding: 1rem;
+            border-radius: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            line-height: 1.5;
+        }
+
+        .agent-message .message-content {
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user-message .message-content {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-bottom-right-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            align-self: flex-start;
+            background-color: #F9FAFB;
+            padding: 0.75rem 1rem;
+            border-radius: 16px;
+            border: 1px solid #E5E7EB;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-light);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: typing 1.5s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+            margin-right: 0;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .chat-input-container {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 999px;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input-wrapper:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .chat-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+        }
+
+        .chat-input:focus {
+            outline: none;
+        }
+
+        .send-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .send-button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .send-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Options component for multiple choice */
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .option-button {
+            background-color: var(--white);
+            border: 1px solid var(--primary-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-button:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: 100vh;
+                width: 100%;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1.5rem;
+            }
+
+            .chat-container {
+                width: 100%;
+            }
+
+            .tagline {
+                font-size: 1.5rem;
+            }
+
+            .features {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <div class="logo">TravelPerfect AI</div>
+                <h1 class="tagline">Your AI-powered travel planner</h1>
+                <p class="description">Chat with our AI assistant to create your perfect travel itinerary - personalized, detailed and ready to use.</p>
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">✓</div>
+                        <div class="feature-text">Personalized itineraries</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">✓</div>
+                        <div class="feature-text">Local insights and recommendations</div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">✓</div>
+                        <div class="feature-text">Detailed day-by-day planning</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">Travel Assistant</div>
+                <div class="chat-status">
+                    <div class="status-dot"></div>
+                    <span>Online</span>
+                </div>
+            </div>
+
+            <div class="chat-body" id="chatBody">
+                <!-- Messages will appear here -->
+            </div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." autocomplete="off">
+                    <button id="sendButton" class="send-button">
+                        <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const chatBody = document.getElementById('chatBody');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        // Webhook configuration - points to our local server endpoint
+        const webhookUrl = 'https://alicon.app.n8n.cloud/webhook/travel-chat';
+        
+        // Conversation state management
+        let conversationId = Date.now().toString();
+        let messageHistory = [];
+        let formData = {};
+        let currentQuestion = 0;
+        
+        // Questions from TravelAgent form with added origin question
+        const questions = [
+            { 
+                id: 'greeting',
+                text: "Hi there! I'm your AI travel assistant. I'll help you create a personalized travel itinerary. What's your name?",
+                field: 'Full Name'
+            },
+            { 
+                id: 'email',
+                text: "Nice to meet you, {Full Name}! Please share your email address so we can send you the completed itinerary.",
+                field: 'Email'
+            },
+            {
+                id: 'origin',
+                text: "Where will you be traveling from? This helps me plan transportation options better.",
+                field: 'Origin'
+            },
+            { 
+                id: 'destinationMultiple',
+                text: "Great! Now, where are you planning to travel to? (If visiting multiple destinations, please list them in order of visit)",
+                field: 'Destinations',
+                multiDestination: true
+            },
+            { 
+                id: 'dates',
+                text: "When are you planning to travel? Please specify start and end dates.",
+                field: 'Dates',
+                processFunc: response => {
+                    // Parse dates from natural language
+                    try {
+                        const dateRegex = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}(?:st|nd|rd|th)? of [A-Za-z]+ to \d{1,2}(?:st|nd|rd|th)? of [A-Za-z]+|[A-Za-z]+ \d{1,2}(?:st|nd|rd|th)? to [A-Za-z]+ \d{1,2}(?:st|nd|rd|th)?|\d{1,2}(?:st|nd|rd|th)? [A-Za-z]+ to \d{1,2}(?:st|nd|rd|th)? [A-Za-z]+)/gi;
+                        const dates = response.match(dateRegex);
+                        if (dates && dates.length) {
+                            // Further processing would be handled by n8n
+                            return dates[0];
+                        }
+                    } catch (e) {
+                        console.error('Error parsing dates:', e);
+                    }
+                    return response;
+                }
+            },
+            { 
+                id: 'travelers',
+                text: "How many people are traveling?",
+                field: 'Number of Travelers',
+                options: ['1', '2', '3', '4', '5', '6+']
+            },
+            { 
+                id: 'ages',
+                text: "What are the ages of the travelers? This helps me recommend age-appropriate activities.",
+                field: 'Ages of Travelers'
+            },
+            { 
+                id: 'budget',
+                text: "What's your approximate total budget for this trip (in USD)?",
+                field: 'Total Budget ($) (Suggested)'
+            },
+            { 
+                id: 'accommodation',
+                text: "What type of accommodation do you prefer?",
+                field: 'Preferred Accommodation',
+                options: ['Hotel', 'Airbnb/Rental', 'Hostel', 'Resort', 'Other']
+            },
+            { 
+                id: 'transportation',
+                text: "How would you prefer to get around during your trip?",
+                field: 'Preferred Transportation',
+                options: ['Public Transportation', 'Rental Car', 'Walking/Biking', 'Taxis/Rideshares', 'Mix of Options']
+            },
+            { 
+                id: 'tripStyle',
+                text: "What style of trip are you looking for? Select all that apply.",
+                field: 'Trip Style (select all that apply)',
+                multiselect: true,
+                options: ['Relaxing', 'Adventurous', 'Cultural', 'Foodie', 'Nightlife', 'Family-Friendly', 'Romantic', 'Budget', 'Luxury']
+            },
+            { 
+                id: 'activityLevel',
+                text: "What activity level are you comfortable with?",
+                field: 'Activity Level',
+                options: ['Low (lots of rest)', 'Moderate', 'High (busy schedule)']
+            },
+            { 
+                id: 'mustSee',
+                text: "Are there any specific places or attractions you absolutely want to visit? (optional)",
+                field: 'Must-See Places (Suggested)',
+                optional: true
+            },
+            { 
+                id: 'mustDo',
+                text: "Any specific activities you definitely want to do during your trip? (optional)",
+                field: 'Must-Do Activities (Suggested)',
+                optional: true
+            },
+            { 
+                id: 'dietaryYesNo',
+                text: "Do you have any dietary restrictions or preferences I should know about?",
+                field: 'Has Dietary Restrictions',
+                options: ['Yes', 'No'],
+                nextQuestionBranch: {
+                    'Yes': 'dietaryDetails',
+                    'No': 'interests'
+                }
+            },
+            { 
+                id: 'dietaryDetails',
+                text: "Please describe your dietary restrictions or preferences:",
+                field: 'Dietary Restrictions'
+            },
+            { 
+                id: 'interests',
+                text: "What are your special interests? (History, art, nature, shopping, etc.)",
+                field: 'Special Interests (Suggested)',
+                optional: true
+            },
+            { 
+                id: 'freeTime',
+                text: "How much free time would you like in your itinerary?",
+                field: 'Free Time Preference',
+                options: ['None (fully scheduled)', 'Some', 'Lots (minimal scheduling)']
+            },
+            { 
+                id: 'sleepPreference',
+                text: "Are you an early riser or a night owl?",
+                field: 'Sleep Preference',
+                options: ['Early Riser', 'Night Owl', 'Flexible']
+            },
+            { 
+                id: 'accessibilityYesNo',
+                text: "Do you have any accessibility needs or mobility concerns?",
+                field: 'Has Accessibility Needs',
+                options: ['Yes', 'No'],
+                nextQuestionBranch: {
+                    'Yes': 'accessibilityDetails',
+                    'No': 'languages'
+                }
+            },
+            { 
+                id: 'accessibilityDetails',
+                text: "Please describe your accessibility needs or mobility concerns:",
+                field: 'Accessibility Needs'
+            },
+            { 
+                id: 'languages',
+                text: "What languages do you speak? (optional)",
+                field: 'Languages Spoken',
+                optional: true
+            },
+            { 
+                id: 'visitedBefore',
+                text: "Have you visited this destination before?",
+                field: 'Have you visited this destination before?',
+                options: ['Yes', 'No']
+            },
+            { 
+                id: 'specialOccasion',
+                text: "Are you celebrating any special occasion during this trip? (Birthday, anniversary, etc.)",
+                field: 'Special Occasion',
+                optional: true
+            },
+            { 
+                id: 'avoid',
+                text: "Is there anything you'd like to avoid during your trip? (Heights, crowds, etc.)",
+                field: 'Things to Avoid',
+                optional: true
+            },
+            { 
+                id: 'additionalNotes',
+                text: "Any additional information you'd like to share to help me create your perfect itinerary? (optional)",
+                field: 'Additional Notes',
+                optional: true
+            },
+            { 
+                id: 'final',
+                text: "Thank you for providing all the details! I'm going to create your personalized travel itinerary now. This will take a moment. I'll email it to you at {Email} when it's ready!",
+                field: 'Final'
+            }
+        ];
+
+        // Initialize the chat
+        window.addEventListener('DOMContentLoaded', () => {
+            // Display first message from agent
+            addAgentMessage(questions[0].text);
+            
+            // Add event listeners
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', e => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            // Focus the input
+            chatInput.focus();
+        });
+        
+        // Send message function
+        function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            
+            // Don't send empty messages
+            if (!userMessage) return;
+            
+            // Add user message to chat
+            addUserMessage(userMessage);
+            chatInput.value = '';
+            
+            // Process user response for current question
+            const currentQ = questions[currentQuestion];
+            processUserResponse(userMessage, currentQ);
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Move to next question or submit data
+            setTimeout(() => {
+                const currentQ = questions[currentQuestion];
+                let nextQuestionId;
+                
+                // Check if there's a branch logic
+                if (currentQ.nextQuestionBranch && formData[currentQ.field] in currentQ.nextQuestionBranch) {
+                    // Get the next question ID based on the user's response
+                    nextQuestionId = currentQ.nextQuestionBranch[formData[currentQ.field]];
+                    
+                    // Find the index of the next question
+                    const nextIndex = questions.findIndex(q => q.id === nextQuestionId);
+                    if (nextIndex !== -1) {
+                        currentQuestion = nextIndex;
+                    } else {
+                        // Fallback to sequential if branch target not found
+                        currentQuestion++;
+                    }
+                } else {
+                    // Default sequential behavior
+                    currentQuestion++;
+                }
+                
+                if (currentQuestion < questions.length) {
+                    const nextQ = questions[currentQuestion];
+                    // Replace any placeholder text with actual user input
+                    let nextText = nextQ.text;
+                    for (const field in formData) {
+                        nextText = nextText.replace(`{${field}}`, formData[field]);
+                    }
+                    hideTypingIndicator();
+                    addAgentMessage(nextText, nextQ.options, nextQ.multiselect);
+                } else {
+                    // Send data to webhook when completed all questions
+                    submitFormData();
+                }
+            }, 1000 + Math.random() * 1000); // Realistic typing delay
+        }
+        
+        // Process user response for a question
+        function processUserResponse(response, question) {
+            // If there's a custom processing function, use it
+            if (question.processFunc) {
+                formData[question.field] = question.processFunc(response);
+            } else if (question.multiDestination) {
+                // Handle multiple destinations
+                // Split by commas, semicolons, or "and"
+                const destinations = response.split(/,|;|\s+and\s+/).map(d => d.trim()).filter(d => d);
+                formData[question.field] = destinations.join(', ');
+                // Add a count field
+                formData['Number of Destinations'] = destinations.length;
+            } else {
+                formData[question.field] = response;
+            }
+            
+            // Update message history
+            messageHistory.push({
+                role: 'user',
+                content: response,
+                question: question.id
+            });
+        }
+        
+        // Submit all collected data to webhook
+        function submitFormData() {
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    conversationId: conversationId,
+                    formData: formData,
+                    messageHistory: messageHistory
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                hideTypingIndicator();
+                if (data.response) {
+                    addAgentMessage(data.response);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                hideTypingIndicator();
+                addAgentMessage("I'm sorry, I wasn't able to process your information. Please try again later.");
+            });
+        }
+        
+        // Add agent message to chat
+        function addAgentMessage(text, options, multiselect) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message agent-message';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = text;
+            messageDiv.appendChild(messageContent);
+            
+            // Add options if provided (for multiple choice questions)
+            if (options && options.length) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options-container';
+                
+                options.forEach(option => {
+                    const optionButton = document.createElement('button');
+                    optionButton.className = 'option-button';
+                    optionButton.textContent = option;
+                    optionButton.addEventListener('click', () => {
+                        if (multiselect) {
+                            // For multiselect, collect options in input field
+                            if (chatInput.value) {
+                                if (!chatInput.value.includes(option)) {
+                                    chatInput.value += ', ' + option;
+                                }
+                            } else {
+                                chatInput.value = option;
+                            }
+                        } else {
+                            // For single select, immediately submit the option
+                            chatInput.value = option;
+                            sendMessage();
+                        }
+                    });
+                    optionsContainer.appendChild(optionButton);
+                });
+                
+                messageDiv.appendChild(optionsContainer);
+            }
+            
+            chatBody.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        // Add user message to chat
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = text;
+            messageDiv.appendChild(messageContent);
+            
+            chatBody.appendChild(messageDiv);
+            scrollToBottom();
+        }
+        
+        // Show typing indicator
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+        }
+        
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        // Scroll chat to bottom
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    </script>
+</body>
+</html> 
