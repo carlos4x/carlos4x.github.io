@@ -1306,6 +1306,11 @@
 
         // Send message function
         function sendMessage() {
+            // 🔍 DEBUG: Track form progress
+            console.log(`📍 Current Question: ${currentQuestion + 1}/${questions.length}`);
+            console.log(`🎯 Question ID: ${questions[currentQuestion]?.id}`);
+            console.log(`📝 Question Text: ${questions[currentQuestion]?.text.substring(0, 50)}...`);
+            
             const userMessage = chatInput.value.trim();
             
             // Don't send empty messages
@@ -1400,6 +1405,11 @@
                         chatInput.placeholder = questions === questionsEN ? 
                             "Survey completed. Thank you!" : 
                             "Encuesta completada. ¡Gracias!";
+                        
+                        // 🔍 DEBUG: Webhook call logging
+                        console.log('🎯 REACHED FINAL QUESTION - CALLING WEBHOOK!');
+                        console.log('📊 Form Data:', formData);
+                        console.log('🔗 Webhook URL:', webhookUrl);
                         
                         // Submit data to webhook
                         submitFormData();
@@ -2127,6 +2137,42 @@
             setTimeout(setVH, 100);
             setTimeout(setVH, 500); // Additional call to handle iOS orientation change delay
         });
+    </script>
+    
+    <!-- 🧪 TEMPORARY TEST BUTTON - Remove after debugging -->
+    <button onclick="testWebhookDirectly()" style="position: fixed; top: 10px; right: 10px; z-index: 9999; background: red; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        🧪 TEST WEBHOOK NOW
+    </button>
+
+    <script>
+        function testWebhookDirectly() {
+            // Fill form with test data
+            formData = {
+                "Full Name": "Test User",
+                "Email": "test@example.com",
+                "Origin": "New York City, NY",
+                "Destinations": "Paris, France",
+                "Start Date": "2024-06-15",
+                "End Date": "2024-06-22",
+                "Number of Travelers": "2",
+                "Ages of Travelers": "Young Adults (18-35)",
+                "Total Budget ($)": "3500",
+                "Booked in Advance": "No",
+                "Preferred Accommodation": "Hotel",
+                "Preferred Transportation": "Mix of Options",
+                "Trip Style (select all that apply)": ["Cultural", "Foodie"],
+                "Activity Level": "Moderate",
+                "Has Must-See Places": "No",
+                "Has Must-Do Activities": "No",
+                "Has Dietary Restrictions": "No",
+                "Special Interests": "Art, cuisine, architecture",
+                "Free Time Preference": "Some"
+            };
+            
+            console.log('🧪 TESTING WEBHOOK DIRECTLY');
+            console.log('📊 Test Form Data:', formData);
+            submitFormData();
+        }
     </script>
 </body>
 </html> 
