@@ -2,24 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Travel Planner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>TravelPerfect Agent | Premium Travel Planning Solutions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Force cache invalidation with version parameter -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <!-- Add a timestamp to force browsers to recognize this as a new page -->
+    <meta name="version" content="v2.1.<?php echo time(); ?>">
     <style>
         :root {
             --primary-color: #4F46E5;
             --primary-light: #818CF8;
             --primary-dark: #4338CA;
-            --secondary-color: #10B981;
+            --secondary-color: #D97706; /* Warm amber for travel theme */
+            --accent-color: #92400E; /* Rich brown for rustic accents */
             --text-color: #1F2937;
             --text-light: #6B7280;
-            --background-color: #F3F4F6;
+            --background-color: #FEF7ED; /* Warm cream background for travel feel */
             --white: #FFFFFF;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --border-radius: 16px;
+            --vh: 1vh; /* Custom property for iOS height fix */
+            --travel-texture: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0idHJhdmVsIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgICAgIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSJyZ2JhKDIxNywxMTksNiwwLjA1KSIvPgogICAgICA8ZyBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMTQ2LDY0LDE0LDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiPgogICAgICAgIDxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjMiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIxNTAiIGN5PSI3NSIgcj0iMiIvPgogICAgICAgIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjEyNSIgcj0iMi41Ii8+CiAgICAgICAgPGNpcmNsZSBjeD0iMjUiIGN5PSIxNzUiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIxNzUiIGN5PSIyNSIgcj0iMS41Ii8+CiAgICAgICAgPHBhdGggZD0iTTMwIDMwIEwgNDAgNDAiLz4KICAgICAgICA8cGF0aCBkPSJNMTYwIDYwIEwgMTcwIDcwIi8+CiAgICAgICAgPHBhdGggZD0iTTgwIDEwMCBMIDkwIDExMCIvPgogICAgICA8L2c+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjdHJhdmVsKSIvPgo8L3N2Zz4=');
         }
 
         * {
@@ -37,6 +46,10 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            background-image: var(--travel-texture);
+            background-repeat: repeat;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
@@ -48,10 +61,13 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow-lg);
             overflow: hidden;
+            /* Add subtle border */
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            margin: 0 auto; /* Ensure horizontal centering */
         }
 
         .sidebar {
-            width: 35%;
+            width: 38%; /* Increased width for more prominence */
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: var(--white);
             padding: 2rem;
@@ -59,6 +75,7 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            min-width: 300px; /* Ensure minimum width */
         }
 
         .sidebar::before {
@@ -73,6 +90,19 @@
             z-index: 0;
         }
 
+        /* Add subtle travel texture overlay to sidebar */
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--travel-texture);
+            opacity: 0.05;
+            z-index: 0;
+        }
+
         .sidebar-content {
             position: relative;
             z-index: 1;
@@ -82,9 +112,11 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 2rem; /* Larger logo */
             font-weight: 700;
             margin-bottom: 2rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Add subtle text shadow */
+            letter-spacing: 0.5px; /* Slight letter spacing for rustic feel */
         }
 
         .tagline {
@@ -92,17 +124,23 @@
             font-weight: 700;
             line-height: 1.3;
             margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15); /* Add subtle text shadow */
         }
 
         .description {
-            font-size: 1rem;
+            font-size: 1.1rem; /* Slightly larger for better readability */
             font-weight: 400;
             line-height: 1.6;
             margin-bottom: 2rem;
+            letter-spacing: 0.2px; /* Slight letter spacing for rustic feel */
         }
 
         .features {
             margin-top: auto;
+            background-color: rgba(0, 0, 0, 0.1); /* Semi-transparent background */
+            padding: 1.2rem;
+            border-radius: 12px;
+            border-left: 3px solid var(--secondary-color); /* Warm amber accent border */
         }
 
         .feature {
@@ -120,29 +158,40 @@
             align-items: center;
             justify-content: center;
             margin-right: 1rem;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
         }
 
         .feature-text {
             font-size: 0.9rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .chat-container {
-            width: 65%;
+            width: 62%; /* Adjusted width to match sidebar increase */
             display: flex;
             flex-direction: column;
+            background-color: var(--white);
+            /* Add very subtle texture */
+            background-image: var(--travel-texture);
+            background-repeat: repeat;
         }
 
         .chat-header {
             padding: 1.5rem 2rem;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid rgba(217, 119, 6, 0.2); /* Rustic border color */
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
         }
 
         .chat-title {
             font-size: 1.5rem;
             font-weight: 600;
+            color: var(--text-color);
+            letter-spacing: 0.2px; /* Slight letter spacing for rustic feel */
         }
 
         .chat-status {
@@ -198,6 +247,14 @@
             background-color: #F9FAFB;
             border: 1px solid #E5E7EB;
             border-bottom-left-radius: 4px;
+            border-left: 2px solid var(--secondary-color); /* Warm amber accent */
+        }
+
+        .error-message {
+            background-color: #FEF2F2 !important;
+            border: 1px solid #FCA5A5 !important;
+            color: #B91C1C;
+            font-style: italic;
         }
 
         .user-message .message-content {
@@ -243,7 +300,8 @@
 
         .chat-input-container {
             padding: 1.5rem 2rem;
-            border-top: 1px solid #E5E7EB;
+            border-top: 1px solid rgba(217, 119, 6, 0.2); /* Rustic border color */
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
         }
 
         .chat-input-wrapper {
@@ -327,6 +385,110 @@
             color: var(--white);
         }
 
+        /* Disabled option buttons */
+        .option-button:disabled,
+        .option-button.disabled {
+            background-color: #f5f5f5 !important;
+            color: #999 !important;
+            border-color: #ddd !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+            opacity: 0.5 !important;
+        }
+        
+        .option-button:disabled:hover,
+        .option-button.disabled:hover {
+            background-color: #f5f5f5 !important;
+            color: #999 !important;
+        }
+
+        /* Add rustic styling to confirmation summary */
+        .confirmation-summary {
+            background-color: #F9FAFB;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+            border-left: 4px solid var(--secondary-color); /* Use warm amber */
+            background-image: var(--travel-texture);
+        }
+
+        .confirmation-item {
+            display: flex;
+            margin-bottom: 8px;
+            align-items: flex-start;
+        }
+
+        .confirmation-label {
+            font-weight: 600;
+            color: var(--accent-color); /* Use rich brown for labels */
+            min-width: 120px;
+            margin-right: 10px;
+        }
+
+        .confirmation-value {
+            color: var(--text-color);
+            flex: 1;
+            word-break: break-word;
+        }
+
+        /* Calendar picker styles with travel accents */
+        .calendar-picker {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+            max-width: 350px;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .day-option {
+            padding: 10px 5px;
+            border: 1px solid var(--primary-light);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: var(--white);
+            color: var(--primary-color);
+            font-size: 0.8rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .day-option:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+
+        .day-option.selected {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 500;
+            border-color: var(--primary-dark);
+        }
+
+        .day-header {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        /* Correction messages */
+        .correction-message {
+            background-color: #E8F4FD;
+            border: 1px solid #B3E0FF;
+            color: #0075CC;
+            font-style: italic;
+            font-size: 0.9em;
+        }
+
         /* Responsive styles */
         @media (max-width: 768px) {
             .container {
@@ -340,10 +502,14 @@
                 width: 100%;
                 height: auto;
                 padding: 1.5rem;
+                max-height: 60vh; /* Limit sidebar height on mobile */
+                overflow-y: auto; /* Allow scrolling within sidebar if needed */
             }
 
             .chat-container {
                 width: 100%;
+                height: auto; /* Allow chat container to expand */
+                min-height: 40vh; /* Ensure chat area is visible */
             }
 
             .tagline {
@@ -351,125 +517,465 @@
             }
 
             .features {
-                display: none;
+                display: block; /* Keep features visible on mobile */
+                margin-bottom: 1rem;
+            }
+            
+            /* Ensure the content container takes full height but allows scrolling */
+            .content-container.visible {
+                height: 100%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
         }
+
+        /* iPhone-specific styles - make survey form more prominent */
+        @media (max-width: 428px) {
+            .sidebar {
+                max-height: 30vh; /* Further limit sidebar height on iPhone */
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .description {
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .features {
+                display: none; /* Hide features on iPhone */
+            }
+            
+            .chat-container {
+                min-height: 70vh; /* Make chat container take more space */
+            }
+            
+            .chat-header {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .chat-input-container {
+                background-color: #ffffff;
+                box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            }
+        }
+
+        /* Language selector styles */
+        .language-selector-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .language-selector-container {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            /* Add subtle texture */
+            background-image: var(--travel-texture);
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        .language-selector-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .language-selector-description {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .language-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 140px;
+        }
+
+        .lang-en {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: 1px solid var(--primary-color);
+        }
+
+        .lang-en:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .lang-es {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .lang-es:hover {
+            background-color: var(--primary-light);
+            color: var(--white);
+        }
+
+        .language-flag {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        /* Hide all content initially */
+        .content-container {
+            display: none; /* Initially hidden */
+        }
+
+        /* When content is visible */
+        .content-container.visible {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
+
+    <!-- Add a travel-themed SVG pattern for texture -->
+    <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+        <defs>
+            <pattern id="travel-pattern" width="200" height="200" patternUnits="userSpaceOnUse">
+                <rect width="200" height="200" fill="rgba(217,119,6,0.05)"/>
+                <g fill="none" stroke="rgba(146,64,14,0.03)" stroke-width="1">
+                    <circle cx="50" cy="50" r="3"/>
+                    <circle cx="150" cy="75" r="2"/>
+                    <circle cx="100" cy="125" r="2.5"/>
+                    <circle cx="25" cy="175" r="2"/>
+                    <circle cx="175" cy="25" r="1.5"/>
+                    <path d="M30 30 L 40 40"/>
+                    <path d="M160 60 L 170 70"/>
+                    <path d="M80 100 L 90 110"/>
+                </g>
+            </pattern>
+        </defs>
+    </svg>
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <div class="sidebar-content">
-                <div class="logo">TravelPerfect AI</div>
-                <h1 class="tagline">Your AI-powered travel planner</h1>
-                <p class="description">Chat with our AI assistant to create your perfect travel itinerary - personalized, detailed and ready to use.</p>
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-icon">✓</div>
-                        <div class="feature-text">Personalized itineraries</div>
+    <!-- Language selector overlay -->
+    <div class="language-selector-overlay" id="languageSelector">
+        <div class="language-selector-container">
+            <h2 class="language-selector-title">Choose Your Language / Elija su Idioma</h2>
+            <p class="language-selector-description">Please select your preferred language to continue / Por favor seleccione su idioma preferido para continuar</p>
+            <div class="language-buttons">
+                <button class="language-button lang-en" onclick="selectLanguage('en')">
+                    <span class="language-flag">🇺🇸</span>
+                    English
+                </button>
+                <button class="language-button lang-es" onclick="selectLanguage('es')">
+                    <span class="language-flag">🇪🇸</span>
+                    Español
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content container (initially hidden) - English Version -->
+    <div class="content-container" id="contentEN">
+        <div class="container">
+            <div class="sidebar">
+                <div class="sidebar-content">
+                    <div class="logo">TravelPerfect Agent</div>
+                    <h1 class="tagline">Your personal travel planning agent</h1>
+                    <p class="description">Chat with our travel expert agent to create your perfect travel itinerary - personalized, detailed and ready to use.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Personalized itineraries</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Local insights and recommendations</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Detailed day-by-day planning</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Expert travel guidance</div>
+                        </div>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">✓</div>
-                        <div class="feature-text">Local insights and recommendations</div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">Travel Planning Agent</div>
+                    <div class="chat-status">
+                        <div class="status-dot"></div>
+                        <span>Online</span>
                     </div>
-                    <div class="feature">
-                        <div class="feature-icon">✓</div>
-                        <div class="feature-text">Detailed day-by-day planning</div>
+                </div>
+
+                <div class="chat-body" id="chatBody">
+                    <!-- Messages will appear here -->
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." autocomplete="off">
+                        <button id="sendButton" class="send-button">
+                            <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="chat-container">
-            <div class="chat-header">
-                <div class="chat-title">Travel Assistant</div>
-                <div class="chat-status">
-                    <div class="status-dot"></div>
-                    <span>Online</span>
+    <!-- Spanish content container (initially hidden) -->
+    <div class="content-container" id="contentES">
+        <div class="container">
+            <div class="sidebar">
+                <div class="sidebar-content">
+                    <div class="logo">Agente TravelPerfect</div>
+                    <h1 class="tagline">Tu agente personal de planificación de viajes</h1>
+                    <p class="description">Chatea con nuestro agente experto en viajes para crear tu itinerario de viaje perfecto - personalizado, detallado y listo para usar.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Itinerarios personalizados</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Conocimientos locales y recomendaciones</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Planificación detallada día a día</div>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">✓</div>
+                            <div class="feature-text">Orientación experta de viajes</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="chat-body" id="chatBody">
-                <!-- Messages will appear here -->
-            </div>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-title">Agente de Planificación de Viajes</div>
+                    <div class="chat-status">
+                        <div class="status-dot"></div>
+                        <span>En línea</span>
+                    </div>
+                </div>
 
-            <div class="typing-indicator" id="typingIndicator">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            </div>
+                <div class="chat-body" id="chatBodyES">
+                    <!-- Messages will appear here -->
+                </div>
 
-            <div class="chat-input-container">
-                <div class="chat-input-wrapper">
-                    <input type="text" id="chatInput" class="chat-input" placeholder="Type your message..." autocomplete="off">
-                    <button id="sendButton" class="send-button">
-                        <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
+                <div class="typing-indicator" id="typingIndicatorES">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <input type="text" id="chatInputES" class="chat-input" placeholder="Escribe tu mensaje..." autocomplete="off">
+                        <button id="sendButtonES" class="send-button">
+                            <svg class="send-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // DOM elements
-        const chatBody = document.getElementById('chatBody');
-        const chatInput = document.getElementById('chatInput');
-        const sendButton = document.getElementById('sendButton');
-        const typingIndicator = document.getElementById('typingIndicator');
+        // Language selection functionality
+        function selectLanguage(lang) {
+            // Hide language selector
+            document.getElementById('languageSelector').style.display = 'none';
+            
+            // Show appropriate content
+            if (lang === 'en') {
+                const contentEN = document.getElementById('contentEN');
+                contentEN.style.display = 'flex';
+                contentEN.classList.add('visible');
+                initializeChat('en');
+            } else if (lang === 'es') {
+                const contentES = document.getElementById('contentES');
+                contentES.style.display = 'flex';
+                contentES.classList.add('visible');
+                initializeChat('es');
+            }
+        }
         
-        // Webhook configuration - points to our local server endpoint
+        // Conversation state (will be set based on language)
+        let conversationId, messageHistory, formData, currentQuestion, questions;
+        
+        // Variables for tracking corrections
+        let fieldsToCorrect = [];
+        let currentCorrectionIndex = 0;
+        
+        // Initialize chat based on selected language
+        function initializeChat(lang) {
+            // Reset conversation state
+            conversationId = Date.now().toString();
+            messageHistory = [];
+            formData = {};
+            currentQuestion = 0;
+            
+            // Set elements and questions based on language
+            if (lang === 'en') {
+                chatBody = document.getElementById('chatBody');
+                chatInput = document.getElementById('chatInput');
+                sendButton = document.getElementById('sendButton');
+                typingIndicator = document.getElementById('typingIndicator');
+                questions = questionsEN;
+            } else if (lang === 'es') {
+                chatBody = document.getElementById('chatBodyES');
+                chatInput = document.getElementById('chatInputES');
+                sendButton = document.getElementById('sendButtonES');
+                typingIndicator = document.getElementById('typingIndicatorES');
+                questions = questionsES;
+            }
+            
+            // Display first message from agent
+            addAgentMessage(questions[0].text);
+            
+            // Add event listeners
+            sendButton.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', e => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            // Focus the input
+            chatInput.focus();
+        }
+        
+        // Core DOM elements
+        let chatBody, chatInput, sendButton, typingIndicator;
+        
+        // Form validation utilities
+        const validators = {
+            fullName: (value) => {
+                const words = value.trim().split(/\s+/);
+                return {
+                    isValid: words.length >= 2 && words[0].length > 0 && words[1].length > 0,
+                    errorMessage: "Please enter your full name (both first and last name).",
+                    errorMessageES: "Por favor ingrese su nombre completo (nombre y apellido)."
+                };
+            },
+            email: (value) => {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return {
+                    isValid: emailRegex.test(value),
+                    errorMessage: "Please enter a valid email address (e.g., name@example.com).",
+                    errorMessageES: "Por favor ingrese un correo electrónico válido (ej., nombre@ejemplo.com)."
+                };
+            },
+            required: (value) => {
+                return {
+                    isValid: value.trim().length > 0,
+                    errorMessage: "This field is required. Please provide a response.",
+                    errorMessageES: "Este campo es obligatorio. Por favor proporcione una respuesta."
+                };
+            }
+        };
+        
+        // Webhook configuration - points to our travel webhook endpoint
         const webhookUrl = 'https://alicon.app.n8n.cloud/webhook/travel-chat';
         
-        // Conversation state management
-        let conversationId = Date.now().toString();
-        let messageHistory = [];
-        let formData = {};
-        let currentQuestion = 0;
-        
-        // Questions from TravelAgent form with added origin question
-        const questions = [
+        // Questions for travel planning form in English
+        const questionsEN = [
             { 
                 id: 'greeting',
-                text: "Hi there! I'm your AI travel assistant. I'll help you create a personalized travel itinerary. What's your name?",
-                field: 'Full Name'
+                text: "Hi there! I'm your personal travel planning agent. I'll help you create a personalized travel itinerary that's perfect for your needs. What's your full name (first and last name)?",
+                field: 'Full Name',
+                validation: 'fullName'
             },
             { 
                 id: 'email',
                 text: "Nice to meet you, {Full Name}! Please share your email address so we can send you the completed itinerary.",
-                field: 'Email'
+                field: 'Email',
+                validation: 'email'
             },
             {
                 id: 'origin',
                 text: "Where will you be traveling from? This helps me plan transportation options better.",
-                field: 'Origin'
+                field: 'Origin',
+                validation: 'required'
             },
             { 
                 id: 'destinationMultiple',
                 text: "Great! Now, where are you planning to travel to? (If visiting multiple destinations, please list them in order of visit)",
                 field: 'Destinations',
-                multiDestination: true
+                multiDestination: true,
+                validation: 'required'
             },
             { 
-                id: 'dates',
-                text: "When are you planning to travel? Please specify start and end dates.",
-                field: 'Dates',
-                processFunc: response => {
-                    // Parse dates from natural language
-                    try {
-                        const dateRegex = /(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}|\d{1,2}(?:st|nd|rd|th)? of [A-Za-z]+ to \d{1,2}(?:st|nd|rd|th)? of [A-Za-z]+|[A-Za-z]+ \d{1,2}(?:st|nd|rd|th)? to [A-Za-z]+ \d{1,2}(?:st|nd|rd|th)?|\d{1,2}(?:st|nd|rd|th)? [A-Za-z]+ to \d{1,2}(?:st|nd|rd|th)? [A-Za-z]+)/gi;
-                        const dates = response.match(dateRegex);
-                        if (dates && dates.length) {
-                            // Further processing would be handled by n8n
-                            return dates[0];
-                        }
-                    } catch (e) {
-                        console.error('Error parsing dates:', e);
-                    }
-                    return response;
-                }
+                id: 'startDate',
+                text: "When would you like to start your trip? Please select your departure date.",
+                field: 'Start Date',
+                isCalendarPicker: true,
+                validation: 'required'
+            },
+            { 
+                id: 'endDate',
+                text: "When would you like to return? Please select your return date.",
+                field: 'End Date',
+                isCalendarPicker: true,
+                validation: 'required'
             },
             { 
                 id: 'travelers',
@@ -480,24 +986,45 @@
             { 
                 id: 'ages',
                 text: "What are the ages of the travelers? This helps me recommend age-appropriate activities.",
-                field: 'Ages of Travelers'
+                field: 'Ages of Travelers',
+                options: ['Children (0-12)', 'Teenagers (13-17)', 'Young Adults (18-35)', 'Middle-Aged (36-64)', 'Seniors (65+)', 'Mixed Ages'],
+                multiselect: true
             },
             { 
                 id: 'budget',
                 text: "What's your approximate total budget for this trip (in USD)?",
-                field: 'Total Budget ($) (Suggested)'
+                field: 'Total Budget ($)',
+                validation: 'required'
+            },
+            { 
+                id: 'bookedInAdvance',
+                text: "Have you booked anything in advance for this trip?",
+                field: 'Booked in Advance',
+                options: ['Yes', 'No'],
+                nextQuestionBranch: {
+                    'Yes': 'bookedDetails',
+                    'No': 'accommodation'
+                }
+            },
+            { 
+                id: 'bookedDetails',
+                text: "Please describe what you've already booked (flights, hotels, activities, etc.):",
+                field: 'Booking Details',
+                validation: 'required'
             },
             { 
                 id: 'accommodation',
                 text: "What type of accommodation do you prefer?",
                 field: 'Preferred Accommodation',
-                options: ['Hotel', 'Airbnb/Rental', 'Hostel', 'Resort', 'Other']
+                options: ['Hotel', 'Airbnb/Rental', 'Hostel', 'Resort', 'Other'],
+                skipIf: 'hasBookedHotel'
             },
             { 
                 id: 'transportation',
                 text: "How would you prefer to get around during your trip?",
                 field: 'Preferred Transportation',
-                options: ['Public Transportation', 'Rental Car', 'Walking/Biking', 'Taxis/Rideshares', 'Mix of Options']
+                options: ['Public Transportation', 'Rental Car', 'Walking/Biking', 'Taxis/Rideshares', 'Mix of Options'],
+                skipIf: 'hasBookedTransportation'
             },
             { 
                 id: 'tripStyle',
@@ -513,16 +1040,36 @@
                 options: ['Low (lots of rest)', 'Moderate', 'High (busy schedule)']
             },
             { 
+                id: 'mustSeeYesNo',
+                text: "Are there any specific places or attractions you absolutely want to visit? (Recommended)",
+                field: 'Has Must-See Places',
+                options: ['Yes', 'No'],
+                nextQuestionBranch: {
+                    'Yes': 'mustSee',
+                    'No': 'mustDoYesNo'
+                }
+            },
+            { 
                 id: 'mustSee',
-                text: "Are there any specific places or attractions you absolutely want to visit? (optional)",
-                field: 'Must-See Places (Suggested)',
-                optional: true
+                text: "Please tell me about the specific places or attractions you want to visit:",
+                field: 'Must-See Places',
+                validation: 'required'
+            },
+            { 
+                id: 'mustDoYesNo',
+                text: "Any specific activities you definitely want to do during your trip? (Recommended)",
+                field: 'Has Must-Do Activities',
+                options: ['Yes', 'No'],
+                nextQuestionBranch: {
+                    'Yes': 'mustDo',
+                    'No': 'dietaryYesNo'
+                }
             },
             { 
                 id: 'mustDo',
-                text: "Any specific activities you definitely want to do during your trip? (optional)",
-                field: 'Must-Do Activities (Suggested)',
-                optional: true
+                text: "Please describe the specific activities you want to do:",
+                field: 'Must-Do Activities',
+                validation: 'required'
             },
             { 
                 id: 'dietaryYesNo',
@@ -537,12 +1084,13 @@
             { 
                 id: 'dietaryDetails',
                 text: "Please describe your dietary restrictions or preferences:",
-                field: 'Dietary Restrictions'
+                field: 'Dietary Restrictions',
+                validation: 'required'
             },
             { 
                 id: 'interests',
                 text: "What are your special interests? (History, art, nature, shopping, etc.)",
-                field: 'Special Interests (Suggested)',
+                field: 'Special Interests',
                 optional: true
             },
             { 
@@ -551,79 +1099,211 @@
                 field: 'Free Time Preference',
                 options: ['None (fully scheduled)', 'Some', 'Lots (minimal scheduling)']
             },
-            { 
-                id: 'sleepPreference',
-                text: "Are you an early riser or a night owl?",
-                field: 'Sleep Preference',
-                options: ['Early Riser', 'Night Owl', 'Flexible']
+            {
+                id: 'confirmationSummary',
+                text: "Great! Here's a summary of your travel information. Please confirm these details are correct:",
+                field: 'Confirmation',
+                isConfirmation: true,
+                options: ['Yes, create my itinerary', 'No, I need to make changes']
             },
-            { 
-                id: 'accessibilityYesNo',
-                text: "Do you have any accessibility needs or mobility concerns?",
-                field: 'Has Accessibility Needs',
-                options: ['Yes', 'No'],
-                nextQuestionBranch: {
-                    'Yes': 'accessibilityDetails',
-                    'No': 'languages'
-                }
-            },
-            { 
-                id: 'accessibilityDetails',
-                text: "Please describe your accessibility needs or mobility concerns:",
-                field: 'Accessibility Needs'
-            },
-            { 
-                id: 'languages',
-                text: "What languages do you speak? (optional)",
-                field: 'Languages Spoken',
-                optional: true
-            },
-            { 
-                id: 'visitedBefore',
-                text: "Have you visited this destination before?",
-                field: 'Have you visited this destination before?',
-                options: ['Yes', 'No']
-            },
-            { 
-                id: 'specialOccasion',
-                text: "Are you celebrating any special occasion during this trip? (Birthday, anniversary, etc.)",
-                field: 'Special Occasion',
-                optional: true
-            },
-            { 
-                id: 'avoid',
-                text: "Is there anything you'd like to avoid during your trip? (Heights, crowds, etc.)",
-                field: 'Things to Avoid',
-                optional: true
-            },
-            { 
-                id: 'additionalNotes',
-                text: "Any additional information you'd like to share to help me create your perfect itinerary? (optional)",
-                field: 'Additional Notes',
-                optional: true
+            {
+                id: 'whatToChange',
+                text: "Which information would you like to correct? Select all that apply:",
+                field: 'Information to Correct',
+                multiselect: true,
+                options: ['Full Name', 'Email', 'Origin', 'Destinations', 'Start Date', 'End Date', 'Number of Travelers', 'Ages of Travelers', 'Total Budget ($)']
             },
             { 
                 id: 'final',
-                text: "Thank you for providing all the details! I'm going to create your personalized travel itinerary now. This will take a moment. I'll email it to you at {Email} when it's ready!",
+                text: "Thank you, {Full Name}! I'm creating your personalized travel itinerary now. Expect your detailed itinerary in your inbox soon at {Email}! This will include day-by-day plans, local recommendations, and everything you need for an amazing trip. If you have any questions, feel free to contact us!",
+                field: 'Final'
+            }
+        ];
+        
+        // Questions for travel planning form in Spanish
+        const questionsES = [
+            { 
+                id: 'greeting',
+                text: "¡Hola! Soy tu agente personal de planificación de viajes. Te ayudaré a crear un itinerario de viaje personalizado que sea perfecto para tus necesidades. ¿Cuál es tu nombre completo (nombre y apellido)?",
+                field: 'Nombre Completo',
+                validation: 'fullName'
+            },
+            { 
+                id: 'email',
+                text: "¡Encantado de conocerte, {Nombre Completo}! Por favor, comparte tu dirección de correo electrónico para que podamos enviarte el itinerario completo.",
+                field: 'Correo Electrónico',
+                validation: 'email'
+            },
+            {
+                id: 'origin',
+                text: "¿Desde dónde viajarás? Esto me ayuda a planificar mejor las opciones de transporte.",
+                field: 'Origen',
+                validation: 'required'
+            },
+            { 
+                id: 'destinationMultiple',
+                text: "¡Excelente! Ahora, ¿a dónde planeas viajar? (Si visitas múltiples destinos, por favor enuméralos en orden de visita)",
+                field: 'Destinos',
+                multiDestination: true,
+                validation: 'required'
+            },
+            { 
+                id: 'startDate',
+                text: "¿Cuándo te gustaría comenzar tu viaje? Por favor selecciona tu fecha de salida.",
+                field: 'Fecha de Inicio',
+                isCalendarPicker: true,
+                validation: 'required'
+            },
+            { 
+                id: 'endDate',
+                text: "¿Cuándo te gustaría regresar? Por favor selecciona tu fecha de regreso.",
+                field: 'Fecha de Regreso',
+                isCalendarPicker: true,
+                validation: 'required'
+            },
+            { 
+                id: 'travelers',
+                text: "¿Cuántas personas van a viajar?",
+                field: 'Número de Viajeros',
+                options: ['1', '2', '3', '4', '5', '6+']
+            },
+            { 
+                id: 'ages',
+                text: "¿Cuáles son las edades de los viajeros? Esto me ayuda a recomendar actividades apropiadas para la edad.",
+                field: 'Edades de los Viajeros',
+                options: ['Niños (0-12)', 'Adolescentes (13-17)', 'Adultos Jóvenes (18-35)', 'Mediana Edad (36-64)', 'Adultos Mayores (65+)', 'Edades Mixtas'],
+                multiselect: true
+            },
+            { 
+                id: 'budget',
+                text: "¿Cuál es tu presupuesto total aproximado para este viaje (en USD)?",
+                field: 'Presupuesto Total ($)',
+                validation: 'required'
+            },
+            { 
+                id: 'bookedInAdvance',
+                text: "¿Has reservado algo por adelantado para este viaje?",
+                field: 'Reservado por Adelantado',
+                options: ['Sí', 'No'],
+                nextQuestionBranch: {
+                    'Sí': 'bookedDetails',
+                    'No': 'accommodation'
+                }
+            },
+            { 
+                id: 'bookedDetails',
+                text: "Por favor describe lo que ya has reservado (vuelos, hoteles, actividades, etc.):",
+                field: 'Detalles de Reservas',
+                validation: 'required'
+            },
+            { 
+                id: 'accommodation',
+                text: "¿Qué tipo de alojamiento prefieres?",
+                field: 'Alojamiento Preferido',
+                options: ['Hotel', 'Airbnb/Alquiler', 'Hostal', 'Resort', 'Otro'],
+                skipIf: 'hasBookedHotel'
+            },
+            { 
+                id: 'transportation',
+                text: "¿Cómo prefieres moverte durante tu viaje?",
+                field: 'Transporte Preferido',
+                options: ['Transporte Público', 'Auto de Alquiler', 'Caminar/Bicicleta', 'Taxis/Rideshares', 'Mezcla de Opciones'],
+                skipIf: 'hasBookedTransportation'
+            },
+            { 
+                id: 'tripStyle',
+                text: "¿Qué estilo de viaje buscas? Selecciona todo lo que aplique.",
+                field: 'Estilo de Viaje (selecciona todo lo que aplique)',
+                multiselect: true,
+                options: ['Relajante', 'Aventurero', 'Cultural', 'Gastronómico', 'Vida Nocturna', 'Familiar', 'Romántico', 'Económico', 'Lujo']
+            },
+            { 
+                id: 'activityLevel',
+                text: "¿Con qué nivel de actividad te sientes cómodo?",
+                field: 'Nivel de Actividad',
+                options: ['Bajo (mucho descanso)', 'Moderado', 'Alto (horario ocupado)']
+            },
+            { 
+                id: 'mustSeeYesNo',
+                text: "¿Hay lugares específicos o atracciones que absolutamente quieras visitar? (Recomendado)",
+                field: 'Tiene Lugares Imperdibles',
+                options: ['Sí', 'No'],
+                nextQuestionBranch: {
+                    'Sí': 'mustSee',
+                    'No': 'mustDoYesNo'
+                }
+            },
+            { 
+                id: 'mustSee',
+                text: "Por favor cuéntame sobre los lugares específicos o atracciones que quieres visitar:",
+                field: 'Lugares Imperdibles',
+                validation: 'required'
+            },
+            { 
+                id: 'mustDoYesNo',
+                text: "¿Alguna actividad específica que definitivamente quieras hacer durante tu viaje? (Recomendado)",
+                field: 'Tiene Actividades Imperdibles',
+                options: ['Sí', 'No'],
+                nextQuestionBranch: {
+                    'Sí': 'mustDo',
+                    'No': 'dietaryYesNo'
+                }
+            },
+            { 
+                id: 'mustDo',
+                text: "Por favor describe las actividades específicas que quieres hacer:",
+                field: 'Actividades Imperdibles',
+                validation: 'required'
+            },
+            { 
+                id: 'dietaryYesNo',
+                text: "¿Tienes alguna restricción dietética o preferencia que deba conocer?",
+                field: 'Tiene Restricciones Dietéticas',
+                options: ['Sí', 'No'],
+                nextQuestionBranch: {
+                    'Sí': 'dietaryDetails',
+                    'No': 'interests'
+                }
+            },
+            { 
+                id: 'dietaryDetails',
+                text: "Por favor describe tus restricciones dietéticas o preferencias:",
+                field: 'Restricciones Dietéticas',
+                validation: 'required'
+            },
+            { 
+                id: 'interests',
+                text: "¿Cuáles son tus intereses especiales? (Historia, arte, naturaleza, compras, etc.)",
+                field: 'Intereses Especiales',
+                optional: true
+            },
+            { 
+                id: 'freeTime',
+                text: "¿Cuánto tiempo libre te gustaría tener en tu itinerario?",
+                field: 'Preferencia de Tiempo Libre',
+                options: ['Ninguno (completamente programado)', 'Algo', 'Mucho (programación mínima)']
+            },
+            {
+                id: 'confirmationSummary',
+                text: "¡Genial! Aquí tienes un resumen de tu información de viaje. Por favor, confirma que estos detalles son correctos:",
+                field: 'Confirmación',
+                isConfirmation: true,
+                options: ['Sí, crea mi itinerario', 'No, necesito hacer cambios']
+            },
+            {
+                id: 'whatToChange',
+                text: "¿Qué información te gustaría corregir? Selecciona todo lo que corresponda:",
+                field: 'Información a Corregir',
+                multiselect: true,
+                options: ['Nombre Completo', 'Correo Electrónico', 'Origen', 'Destinos', 'Fecha de Inicio', 'Fecha de Regreso', 'Número de Viajeros', 'Edades de los Viajeros', 'Presupuesto Total ($)']
+            },
+            { 
+                id: 'final',
+                text: "¡Gracias, {Nombre Completo}! Estoy creando tu itinerario de viaje personalizado ahora. ¡Espera tu itinerario detallado en tu bandeja de entrada pronto en {Correo Electrónico}! Esto incluirá planes día a día, recomendaciones locales y todo lo que necesitas para un viaje increíble. ¡Si tienes alguna pregunta, no dudes en contactarnos!",
                 field: 'Final'
             }
         ];
 
-        // Initialize the chat
-        window.addEventListener('DOMContentLoaded', () => {
-            // Display first message from agent
-            addAgentMessage(questions[0].text);
-            
-            // Add event listeners
-            sendButton.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', e => {
-                if (e.key === 'Enter') sendMessage();
-            });
-            
-            // Focus the input
-            chatInput.focus();
-        });
-        
         // Send message function
         function sendMessage() {
             const userMessage = chatInput.value.trim();
@@ -631,23 +1311,62 @@
             // Don't send empty messages
             if (!userMessage) return;
             
+            const currentQ = questions[currentQuestion];
+            
+            // Validate input if validation is specified
+            if (currentQ.validation) {
+                const validator = validators[currentQ.validation];
+                if (validator) {
+                    const validationResult = validator(userMessage);
+                    if (!validationResult.isValid) {
+                        // Show validation error message based on language
+                        const errorMessage = questions === questionsEN ? 
+                            validationResult.errorMessage : 
+                            validationResult.errorMessageES;
+                        addAgentMessage(errorMessage, null, null, true);
+                        return;
+                    }
+                }
+            }
+            
             // Add user message to chat
             addUserMessage(userMessage);
             chatInput.value = '';
             
+            // Disable all option buttons for previous questions
+            disablePreviousOptions();
+            
             // Process user response for current question
-            const currentQ = questions[currentQuestion];
-            processUserResponse(userMessage, currentQ);
+            const handledQuestionAdvancement = processUserResponse(userMessage, currentQ);
             
             // Show typing indicator
             showTypingIndicator();
             
             // Move to next question or submit data
             setTimeout(() => {
-                const currentQ = questions[currentQuestion];
-                let nextQuestionId;
+                // If the response handling function already updated the currentQuestion, don't proceed with normal flow
+                if (handledQuestionAdvancement) {
+                    const nextQ = questions[currentQuestion];
+                    
+                    // If we're in correction mode, use custom correction prompts
+                    let nextText = nextQ.text;
+                    if (isCorrectingField()) {
+                        const lang = questions === questionsEN ? 'en' : 'es';
+                        nextText = getCorrectionPrompt(fieldsToCorrect[currentCorrectionIndex-1], lang);
+                    } else {
+                        // Replace any placeholder text with actual user input
+                        for (const field in formData) {
+                            nextText = nextText.replace(`{${field}}`, formData[field]);
+                        }
+                    }
+                    
+                    hideTypingIndicator();
+                    addAgentMessage(nextText, nextQ.options, nextQ.multiselect);
+                    return;
+                }
                 
-                // Check if there's a branch logic
+                // Check if there's branch logic based on the response
+                let nextQuestionId;
                 if (currentQ.nextQuestionBranch && formData[currentQ.field] in currentQ.nextQuestionBranch) {
                     // Get the next question ID based on the user's response
                     nextQuestionId = currentQ.nextQuestionBranch[formData[currentQ.field]];
@@ -665,8 +1384,27 @@
                     currentQuestion++;
                 }
                 
+                // Skip questions based on booking analysis
+                while (currentQuestion < questions.length && shouldSkipQuestion(questions[currentQuestion])) {
+                    currentQuestion++;
+                }
+                
                 if (currentQuestion < questions.length) {
                     const nextQ = questions[currentQuestion];
+                    
+                    // Check if this is the final question
+                    if (nextQ.id === 'final') {
+                        // Disable chat input and button for final message
+                        chatInput.disabled = true;
+                        sendButton.disabled = true;
+                        chatInput.placeholder = questions === questionsEN ? 
+                            "Survey completed. Thank you!" : 
+                            "Encuesta completada. ¡Gracias!";
+                        
+                        // Submit data to webhook
+                        submitFormData();
+                    }
+                    
                     // Replace any placeholder text with actual user input
                     let nextText = nextQ.text;
                     for (const field in formData) {
@@ -675,27 +1413,23 @@
                     hideTypingIndicator();
                     addAgentMessage(nextText, nextQ.options, nextQ.multiselect);
                 } else {
-                    // Send data to webhook when completed all questions
-                    submitFormData();
+                    // This shouldn't happen with the new structure, but just in case
+                    hideTypingIndicator();
+                    const finalMessage = questions === questionsEN ? 
+                        "Thank you for completing the survey!" : 
+                        "¡Gracias por completar la encuesta!";
+                    addAgentMessage(finalMessage);
+                    
+                    // Disable input
+                    chatInput.disabled = true;
+                    sendButton.disabled = true;
                 }
-            }, 1000 + Math.random() * 1000); // Realistic typing delay
+            }, 300 + Math.random() * 300); // Reduced typing delay for better UX
         }
         
         // Process user response for a question
         function processUserResponse(response, question) {
-            // If there's a custom processing function, use it
-            if (question.processFunc) {
-                formData[question.field] = question.processFunc(response);
-            } else if (question.multiDestination) {
-                // Handle multiple destinations
-                // Split by commas, semicolons, or "and"
-                const destinations = response.split(/,|;|\s+and\s+/).map(d => d.trim()).filter(d => d);
-                formData[question.field] = destinations.join(', ');
-                // Add a count field
-                formData['Number of Destinations'] = destinations.length;
-            } else {
-                formData[question.field] = response;
-            }
+            formData[question.field] = response;
             
             // Update message history
             messageHistory.push({
@@ -703,49 +1437,455 @@
                 content: response,
                 question: question.id
             });
+            
+            // Smart question skipping based on booking details
+            if (question.id === 'bookedDetails') {
+                analyzeBookingDetails(response);
+            }
+            
+            // Special handling for confirmation response
+            if (question.id === 'confirmationSummary') {
+                // Handle based on language
+                const isEnglish = questions === questionsEN;
+                const yesOption = isEnglish ? 
+                    'Yes, create my itinerary' : 
+                    'Sí, crea mi itinerario';
+                const noOption = isEnglish ? 
+                    'No, I need to make changes' : 
+                    'No, necesito hacer cambios';
+                
+                if (response === noOption) {
+                    // Reset correction tracking variables
+                    fieldsToCorrect = [];
+                    currentCorrectionIndex = 0;
+                    
+                    // Set currentQuestion to the whatToChange question
+                    const whatToChangeIndex = questions.findIndex(q => q.id === 'whatToChange');
+                    if (whatToChangeIndex !== -1) {
+                        currentQuestion = whatToChangeIndex;
+                        return true; // Signal that we've handled the question advancement
+                    }
+                } else if (response === yesOption) {
+                    // Go to final question
+                    const finalIndex = questions.findIndex(q => q.id === 'final');
+                    if (finalIndex !== -1) {
+                        currentQuestion = finalIndex;
+                        return true; // Signal that we've handled the question advancement
+                    }
+                }
+            }
+            
+            // Handle whatToChange response
+            if (question.id === 'whatToChange') {
+                // Parse selected fields to correct
+                fieldsToCorrect = response.split(/,\s*/).map(field => field.trim());
+                currentCorrectionIndex = 0;
+                
+                if (fieldsToCorrect.length > 0) {
+                    // Set a flag indicating we're in correction mode
+                    window.isInCorrectionMode = true;
+                    
+                    // Remember current language to maintain consistency
+                    window.correctionLanguage = questions === questionsEN ? 'en' : 'es';
+                    
+                    // Find the question for the first field to correct
+                    for (let i = 0; i < questions.length; i++) {
+                        if (questions[i].field === fieldsToCorrect[currentCorrectionIndex]) {
+                            currentQuestion = i;
+                            
+                            // Store the current position in the survey to return later
+                            window.returnToQuestionAfterCorrection = questions.findIndex(q => q.id === 'confirmationSummary');
+                            
+                            return true; // Signal that we've handled the question advancement
+                        }
+                    }
+                }
+            }
+            
+            // Handle field correction completion
+            if (isCorrectingField()) {
+                // Check if the current field being corrected matches the current question
+                if (question.field === fieldsToCorrect[currentCorrectionIndex]) {
+                    currentCorrectionIndex++;
+                    
+                    // If we've corrected all fields, return to the confirmation summary
+                    if (currentCorrectionIndex >= fieldsToCorrect.length && window.returnToQuestionAfterCorrection) {
+                        currentQuestion = window.returnToQuestionAfterCorrection;
+                        fieldsToCorrect = [];
+                        currentCorrectionIndex = 0;
+                        window.isInCorrectionMode = false; // Reset correction mode flag
+                        return true; // Signal that we've handled the question advancement
+                    } else if (currentCorrectionIndex < fieldsToCorrect.length) {
+                        // Move to the next field to correct
+                        for (let i = 0; i < questions.length; i++) {
+                            if (questions[i].field === fieldsToCorrect[currentCorrectionIndex]) {
+                                currentQuestion = i;
+                                return true; // Signal that we've handled the question advancement
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return false; // Signal that we haven't handled the question advancement
+        }
+        
+        // Analyze booking details to determine which questions to skip
+        function analyzeBookingDetails(bookingText) {
+            const lowerText = bookingText.toLowerCase();
+            
+            // Check for hotel/accommodation bookings
+            if (lowerText.includes('hotel') || lowerText.includes('accommodation') || 
+                lowerText.includes('airbnb') || lowerText.includes('resort') || 
+                lowerText.includes('hostel') || lowerText.includes('stay')) {
+                window.hasBookedHotel = true;
+            }
+            
+            // Check for transportation bookings
+            if (lowerText.includes('flight') || lowerText.includes('car') || 
+                lowerText.includes('rental') || lowerText.includes('transport') || 
+                lowerText.includes('bus') || lowerText.includes('train')) {
+                window.hasBookedTransportation = true;
+            }
+            
+            // Check for activity bookings
+            if (lowerText.includes('activity') || lowerText.includes('activities') || 
+                lowerText.includes('tour') || lowerText.includes('excursion') || 
+                lowerText.includes('ticket') || lowerText.includes('show')) {
+                window.hasBookedActivities = true;
+            }
+        }
+        
+        // Helper function to check if we should skip a question
+        function shouldSkipQuestion(question) {
+            if (question.skipIf) {
+                switch (question.skipIf) {
+                    case 'hasBookedHotel':
+                        return window.hasBookedHotel === true;
+                    case 'hasBookedTransportation':
+                        return window.hasBookedTransportation === true;
+                    case 'hasBookedActivities':
+                        return window.hasBookedActivities === true;
+                    default:
+                        return false;
+                }
+            }
+            return false;
+        }
+        
+        // Helper function to check if we're currently correcting fields
+        function isCorrectingField() {
+            return window.isInCorrectionMode === true && fieldsToCorrect && fieldsToCorrect.length > 0;
+        }
+        
+        // Get simplified correction prompts for each field
+        function getCorrectionPrompt(fieldName, language) {
+            const isEnglish = language === 'en';
+            
+            // Safety check to prevent undefined fields
+            if (!fieldName) {
+                return isEnglish ? 
+                    "Please correct this information:" : 
+                    "Por favor, corrija esta información:";
+            }
+            
+            // English correction prompts
+            const englishPrompts = {
+                'Full Name': "Please correct your full name below:",
+                'Email': "Please provide the correct email address:",
+                'Origin': "Please correct where you'll be traveling from:",
+                'Destinations': "Please correct your travel destinations:",
+                'Start Date': "Please select the correct departure date:",
+                'End Date': "Please select the correct return date:",
+                'Number of Travelers': "Please correct the number of travelers:",
+                'Ages of Travelers': "Please correct the ages of travelers:",
+                'Total Budget ($)': "Please correct your total budget:"
+            };
+            
+            // Spanish correction prompts
+            const spanishPrompts = {
+                'Nombre Completo': "Por favor, corrija su nombre completo a continuación:",
+                'Correo Electrónico': "Por favor, proporcione la dirección de correo electrónico correcta:",
+                'Origen': "Por favor, corrija desde dónde viajará:",
+                'Destinos': "Por favor, corrija sus destinos de viaje:",
+                'Fecha de Inicio': "Por favor, seleccione la fecha de salida correcta:",
+                'Fecha de Regreso': "Por favor, seleccione la fecha de regreso correcta:",
+                'Número de Viajeros': "Por favor, corrija el número de viajeros:",
+                'Edades de los Viajeros': "Por favor, corrija las edades de los viajeros:",
+                'Presupuesto Total ($)': "Por favor, corrija su presupuesto total:"
+            };
+            
+            return isEnglish ? 
+                (englishPrompts[fieldName] || `Please correct your ${fieldName}:`) : 
+                (spanishPrompts[fieldName] || `Por favor, corrija su ${fieldName}:`);
         }
         
         // Submit all collected data to webhook
         function submitFormData() {
+            // Note: Input is already disabled when final question is reached
+            
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Origin': window.location.origin
                 },
                 body: JSON.stringify({
                     conversationId: conversationId,
                     formData: formData,
-                    messageHistory: messageHistory
+                    messageHistory: messageHistory,
+                    triggerFollowUp: true,
+                    language: questions === questionsEN ? 'en' : 'es'
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                hideTypingIndicator();
-                if (data.response) {
-                    addAgentMessage(data.response);
+            .then(response => {
+                if (response.ok) {
+                    return response.json().catch(() => ({ response: null }));
                 }
+                return { response: null };
+            })
+            .then(data => {
+                // Data submitted successfully - no need to show additional messages
+                // since the final message is already displayed
+                console.log('Travel itinerary request submitted successfully');
             })
             .catch(error => {
-                console.error('Error:', error);
-                hideTypingIndicator();
-                addAgentMessage("I'm sorry, I wasn't able to process your information. Please try again later.");
+                console.error('Error submitting travel data:', error);
+                // Even if webhook fails, the user already sees the final message
             });
         }
         
         // Add agent message to chat
-        function addAgentMessage(text, options, multiselect) {
+        function addAgentMessage(text, options, multiselect, isError = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message agent-message';
             
             const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
+            if (isError) {
+                messageContent.className = 'message-content error-message';
+            } else {
+                messageContent.className = 'message-content';
+            }
             messageContent.textContent = text;
             messageDiv.appendChild(messageContent);
             
+            // Get current question
+            const currentQ = questions[currentQuestion];
+            
+            // Handle calendar picker for travel dates
+            if (currentQ && currentQ.isCalendarPicker) {
+                const calendarPicker = document.createElement('div');
+                calendarPicker.className = 'calendar-picker';
+                calendarPicker.dataset.questionId = currentQ.id; // Add question ID for tracking
+                
+                // Create month/year selector
+                const monthYearSelector = document.createElement('div');
+                monthYearSelector.className = 'month-year-selector';
+                monthYearSelector.style.display = 'flex';
+                monthYearSelector.style.justifyContent = 'space-between';
+                monthYearSelector.style.alignItems = 'center';
+                monthYearSelector.style.marginBottom = '15px';
+                monthYearSelector.style.padding = '10px';
+                monthYearSelector.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+                monthYearSelector.style.borderRadius = '8px';
+                
+                const prevButton = document.createElement('button');
+                prevButton.textContent = '◀';
+                prevButton.style.background = 'none';
+                prevButton.style.border = 'none';
+                prevButton.style.fontSize = '18px';
+                prevButton.style.cursor = 'pointer';
+                prevButton.style.color = 'var(--primary-color)';
+                
+                const monthYearDisplay = document.createElement('div');
+                monthYearDisplay.style.fontSize = '16px';
+                monthYearDisplay.style.fontWeight = '600';
+                monthYearDisplay.style.color = 'var(--primary-color)';
+                
+                const nextButton = document.createElement('button');
+                nextButton.textContent = '▶';
+                nextButton.style.background = 'none';
+                nextButton.style.border = 'none';
+                nextButton.style.fontSize = '18px';
+                nextButton.style.cursor = 'pointer';
+                nextButton.style.color = 'var(--primary-color)';
+                
+                monthYearSelector.appendChild(prevButton);
+                monthYearSelector.appendChild(monthYearDisplay);
+                monthYearSelector.appendChild(nextButton);
+                
+                // Create calendar grid container
+                const calendarGrid = document.createElement('div');
+                calendarGrid.style.display = 'grid';
+                calendarGrid.style.gridTemplateColumns = 'repeat(7, 1fr)';
+                calendarGrid.style.gap = '5px';
+                calendarGrid.style.border = '1px solid rgba(217, 119, 6, 0.2)';
+                calendarGrid.style.padding = '10px';
+                calendarGrid.style.borderRadius = '8px';
+                calendarGrid.style.backgroundColor = 'rgba(255, 255, 255, 0.6)';
+                
+                // Current date tracking
+                let currentDate = new Date();
+                let displayMonth = currentDate.getMonth();
+                let displayYear = currentDate.getFullYear();
+                
+                function renderCalendar() {
+                    // Clear previous calendar
+                    calendarGrid.innerHTML = '';
+                    
+                    // Update month/year display
+                    const monthNames = questions === questionsEN ?
+                        ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] :
+                        ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                    
+                    monthYearDisplay.textContent = `${monthNames[displayMonth]} ${displayYear}`;
+                    
+                    // Create day headers
+                    const dayNames = questions === questionsEN ? 
+                        ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : 
+                        ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+                    
+                    dayNames.forEach(day => {
+                        const dayHeader = document.createElement('div');
+                        dayHeader.className = 'day-header';
+                        dayHeader.textContent = day;
+                        dayHeader.style.textAlign = 'center';
+                        dayHeader.style.fontSize = '0.7rem';
+                        dayHeader.style.fontWeight = '600';
+                        dayHeader.style.color = 'var(--text-light)';
+                        dayHeader.style.marginBottom = '5px';
+                        calendarGrid.appendChild(dayHeader);
+                    });
+                    
+                    // Get first day of month and number of days
+                    const firstDay = new Date(displayYear, displayMonth, 1);
+                    const lastDay = new Date(displayYear, displayMonth + 1, 0);
+                    const firstDayOfWeek = firstDay.getDay();
+                    const daysInMonth = lastDay.getDate();
+                    
+                    // Add empty cells for days before month starts
+                    for (let i = 0; i < firstDayOfWeek; i++) {
+                        const emptyCell = document.createElement('div');
+                        calendarGrid.appendChild(emptyCell);
+                    }
+                    
+                    // Add days of the month
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dayOption = document.createElement('div');
+                        dayOption.className = 'day-option';
+                        dayOption.textContent = day;
+                        dayOption.style.padding = '10px 5px';
+                        dayOption.style.border = '1px solid var(--primary-light)';
+                        dayOption.style.borderRadius = '8px';
+                        dayOption.style.textAlign = 'center';
+                        dayOption.style.cursor = 'pointer';
+                        dayOption.style.transition = 'all 0.2s ease';
+                        dayOption.style.backgroundColor = 'var(--white)';
+                        dayOption.style.color = 'var(--primary-color)';
+                        dayOption.style.fontSize = '0.8rem';
+                        dayOption.style.minHeight = '40px';
+                        dayOption.style.display = 'flex';
+                        dayOption.style.alignItems = 'center';
+                        dayOption.style.justifyContent = 'center';
+                        
+                        // Check if this date is in the past (disable if so)
+                        const thisDate = new Date(displayYear, displayMonth, day);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        
+                        if (thisDate < today) {
+                            dayOption.style.opacity = '0.3';
+                            dayOption.style.cursor = 'not-allowed';
+                            dayOption.style.backgroundColor = '#f5f5f5';
+                        } else {
+                            const formattedDate = `${monthNames[displayMonth]} ${day}, ${displayYear}`;
+                            dayOption.dataset.fullDate = formattedDate;
+                            
+                            dayOption.addEventListener('click', () => {
+                                // Remove selected class from all options
+                                document.querySelectorAll('.day-option').forEach(opt => {
+                                    opt.classList.remove('selected');
+                                });
+                                
+                                // Add selected class to clicked option
+                                dayOption.classList.add('selected');
+                                dayOption.style.backgroundColor = 'var(--primary-color)';
+                                dayOption.style.color = 'var(--white)';
+                                dayOption.style.fontWeight = '500';
+                                dayOption.style.borderColor = 'var(--primary-dark)';
+                                
+                                // Set the input value to the full date
+                                chatInput.value = formattedDate;
+                                
+                                // Focus the input after selecting a date
+                                chatInput.focus();
+                            });
+                            
+                            dayOption.addEventListener('mouseenter', () => {
+                                if (!dayOption.classList.contains('selected')) {
+                                    dayOption.style.backgroundColor = 'var(--primary-light)';
+                                    dayOption.style.color = 'var(--white)';
+                                }
+                            });
+                            
+                            dayOption.addEventListener('mouseleave', () => {
+                                if (!dayOption.classList.contains('selected')) {
+                                    dayOption.style.backgroundColor = 'var(--white)';
+                                    dayOption.style.color = 'var(--primary-color)';
+                                }
+                            });
+                        }
+                        
+                        calendarGrid.appendChild(dayOption);
+                    }
+                }
+                
+                // Navigation event listeners
+                prevButton.addEventListener('click', () => {
+                    displayMonth--;
+                    if (displayMonth < 0) {
+                        displayMonth = 11;
+                        displayYear--;
+                    }
+                    // Don't allow going to past months
+                    const currentMonth = new Date().getMonth();
+                    const currentYear = new Date().getFullYear();
+                    if (displayYear < currentYear || (displayYear === currentYear && displayMonth < currentMonth)) {
+                        displayMonth = currentMonth;
+                        displayYear = currentYear;
+                    }
+                    renderCalendar();
+                });
+                
+                nextButton.addEventListener('click', () => {
+                    displayMonth++;
+                    if (displayMonth > 11) {
+                        displayMonth = 0;
+                        displayYear++;
+                    }
+                    // Limit to 2 years in the future
+                    const maxYear = new Date().getFullYear() + 2;
+                    if (displayYear > maxYear) {
+                        displayYear = maxYear;
+                        displayMonth = 11;
+                    }
+                    renderCalendar();
+                });
+                
+                // Initial render
+                renderCalendar();
+                
+                calendarPicker.appendChild(monthYearSelector);
+                calendarPicker.appendChild(calendarGrid);
+                messageDiv.appendChild(calendarPicker);
+            }
+            
             // Add options if provided (for multiple choice questions)
-            if (options && options.length) {
+            if (options && options.length && !currentQ.isCalendarPicker) {
                 const optionsContainer = document.createElement('div');
                 optionsContainer.className = 'options-container';
+                optionsContainer.dataset.questionId = currentQ.id;
                 
                 options.forEach(option => {
                     const optionButton = document.createElement('button');
@@ -761,6 +1901,7 @@
                             } else {
                                 chatInput.value = option;
                             }
+                            chatInput.focus();
                         } else {
                             // For single select, immediately submit the option
                             chatInput.value = option;
@@ -773,8 +1914,95 @@
                 messageDiv.appendChild(optionsContainer);
             }
             
+            // Handle confirmation summary
+            if (currentQ && currentQ.isConfirmation) {
+                const confirmationSummary = document.createElement('div');
+                confirmationSummary.className = 'confirmation-summary';
+                
+                // Add each item in a structured format based on language
+                const confirmationFields = questions === questionsEN ? 
+                    [
+                        { label: 'Name', field: 'Full Name' },
+                        { label: 'Email', field: 'Email' },
+                        { label: 'Origin', field: 'Origin' },
+                        { label: 'Destinations', field: 'Destinations' },
+                        { label: 'Start Date', field: 'Start Date' },
+                        { label: 'End Date', field: 'End Date' },
+                        { label: 'Travelers', field: 'Number of Travelers' },
+                        { label: 'Ages', field: 'Ages of Travelers' },
+                        { label: 'Budget', field: 'Total Budget ($)' },
+                        { label: 'Booked in Advance', field: 'Booked in Advance' },
+                        { label: 'Booking Details', field: 'Booking Details' },
+                        { label: 'Accommodation', field: 'Preferred Accommodation' },
+                        { label: 'Transportation', field: 'Preferred Transportation' },
+                        { label: 'Trip Style', field: 'Trip Style (select all that apply)' },
+                        { label: 'Activity Level', field: 'Activity Level' },
+                        { label: 'Must-See Places', field: 'Must-See Places' },
+                        { label: 'Must-Do Activities', field: 'Must-Do Activities' },
+                        { label: 'Dietary Restrictions', field: 'Dietary Restrictions' },
+                        { label: 'Special Interests', field: 'Special Interests' },
+                        { label: 'Free Time', field: 'Free Time Preference' }
+                    ] : 
+                    [
+                        { label: 'Nombre', field: 'Nombre Completo' },
+                        { label: 'Correo', field: 'Correo Electrónico' },
+                        { label: 'Origen', field: 'Origen' },
+                        { label: 'Destinos', field: 'Destinos' },
+                        { label: 'Fecha de Inicio', field: 'Fecha de Inicio' },
+                        { label: 'Fecha de Regreso', field: 'Fecha de Regreso' },
+                        { label: 'Viajeros', field: 'Número de Viajeros' },
+                        { label: 'Edades', field: 'Edades de los Viajeros' },
+                        { label: 'Presupuesto', field: 'Presupuesto Total ($)' },
+                        { label: 'Reservado por Adelantado', field: 'Reservado por Adelantado' },
+                        { label: 'Detalles de Reservas', field: 'Detalles de Reservas' },
+                        { label: 'Alojamiento', field: 'Alojamiento Preferido' },
+                        { label: 'Transporte', field: 'Transporte Preferido' },
+                        { label: 'Estilo de Viaje', field: 'Estilo de Viaje (selecciona todo lo que aplique)' },
+                        { label: 'Nivel de Actividad', field: 'Nivel de Actividad' },
+                        { label: 'Lugares Imperdibles', field: 'Lugares Imperdibles' },
+                        { label: 'Actividades Imperdibles', field: 'Actividades Imperdibles' },
+                        { label: 'Restricciones Dietéticas', field: 'Restricciones Dietéticas' },
+                        { label: 'Intereses Especiales', field: 'Intereses Especiales' },
+                        { label: 'Tiempo Libre', field: 'Preferencia de Tiempo Libre' }
+                    ];
+                
+                confirmationFields.forEach(item => {
+                    if (formData[item.field]) {
+                        const confirmationItem = document.createElement('div');
+                        confirmationItem.className = 'confirmation-item';
+                        
+                        const label = document.createElement('div');
+                        label.className = 'confirmation-label';
+                        label.textContent = item.label + ':';
+                        
+                        const value = document.createElement('div');
+                        value.className = 'confirmation-value';
+                        value.textContent = formData[item.field];
+                        
+                        confirmationItem.appendChild(label);
+                        confirmationItem.appendChild(value);
+                        confirmationSummary.appendChild(confirmationItem);
+                    }
+                });
+                
+                messageDiv.appendChild(confirmationSummary);
+            }
+            
             chatBody.appendChild(messageDiv);
             scrollToBottom();
+            
+            // Auto-focus the input field after showing a new message
+            if (!options || options.length === 0) {
+                chatInput.focus();
+            }
+            
+            // Immediately disable options from previous questions to prevent interaction
+            disablePreviousOptions();
+            
+            // Also call with a small delay to ensure DOM is fully updated
+            setTimeout(() => {
+                disablePreviousOptions();
+            }, 50);
         }
         
         // Add user message to chat
@@ -806,6 +2034,99 @@
         function scrollToBottom() {
             chatBody.scrollTop = chatBody.scrollHeight;
         }
+        
+        // Function to disable all option buttons for previous questions
+        function disablePreviousOptions() {
+            // Get all option buttons in the chat
+            const allOptionButtons = document.querySelectorAll('.option-button');
+            
+            allOptionButtons.forEach(button => {
+                // Find the parent options container
+                const container = button.closest('.options-container');
+                if (container && container.dataset.questionId) {
+                    const questionId = container.dataset.questionId;
+                    const questionIndex = questions.findIndex(q => q.id === questionId);
+                    
+                    // If this is a previous question, disable its option buttons
+                    if (questionIndex < currentQuestion && questionIndex !== -1) {
+                        button.disabled = true;
+                        button.classList.add('disabled');
+                        button.style.opacity = '0.5';
+                        button.style.cursor = 'not-allowed';
+                        button.style.pointerEvents = 'none';
+                        button.style.backgroundColor = '#f5f5f5';
+                        button.style.color = '#999';
+                        
+                        // Remove all event listeners by cloning and replacing
+                        const newButton = button.cloneNode(true);
+                        button.parentNode.replaceChild(newButton, button);
+                    }
+                }
+            });
+            
+            // Also disable calendar pickers for previous questions
+            const calendarPickers = document.querySelectorAll('.calendar-picker');
+            calendarPickers.forEach(picker => {
+                if (picker.dataset.questionId) {
+                    const questionId = picker.dataset.questionId;
+                    const questionIndex = questions.findIndex(q => q.id === questionId);
+                    
+                    // If this is a previous question, disable its calendar
+                    if (questionIndex < currentQuestion && questionIndex !== -1) {
+                        const dayOptions = picker.querySelectorAll('.day-option');
+                        const navButtons = picker.querySelectorAll('button');
+                        
+                        // Disable all day options
+                        dayOptions.forEach(day => {
+                            day.style.opacity = '0.5';
+                            day.style.cursor = 'not-allowed';
+                            day.style.pointerEvents = 'none';
+                            day.style.backgroundColor = '#f5f5f5';
+                            
+                            // Remove event listeners by cloning and replacing
+                            const newDay = day.cloneNode(true);
+                            day.parentNode.replaceChild(newDay, day);
+                        });
+                        
+                        // Disable navigation buttons
+                        navButtons.forEach(button => {
+                            button.disabled = true;
+                            button.style.opacity = '0.5';
+                            button.style.cursor = 'not-allowed';
+                            button.style.pointerEvents = 'none';
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+    
+    <!-- Mobile fixes script - Ensures proper display on iOS/mobile devices -->
+    <script>
+        // Fix for iOS 100vh issue
+        function setVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        // Run when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial height
+            setVH();
+            
+            // Make scrollable areas work properly on iOS
+            document.querySelectorAll('.chat-body, .sidebar-content').forEach(el => {
+                el.style.webkitOverflowScrolling = 'touch';
+            });
+        });
+        
+        // Update on resize and orientation change
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', function() {
+            // Small delay to ensure orientation change is complete
+            setTimeout(setVH, 100);
+            setTimeout(setVH, 500); // Additional call to handle iOS orientation change delay
+        });
     </script>
 </body>
 </html> 
